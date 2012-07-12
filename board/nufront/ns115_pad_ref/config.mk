@@ -1,0 +1,11 @@
+#
+# 
+#
+
+TEXT_BASE = 0x8FC00000
+
+#TEXT_BASE = 0x80000200
+#TEXT_BASE = 0x76000000
+
+LDSCRIPT := $(SRCTREE)/board/$(VENDOR)/$(BOARD)/u-boot.lds
+

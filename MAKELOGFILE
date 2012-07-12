@@ -1,0 +1,455 @@
+Generating include/autoconf.mk
+Generating include/autoconf.mk.dep
+cat: .git/refs/remotes/origin/090727_armdev: 没有那个文件或目录
+# On branch remotes/origin/090727_armdev
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   board/armltd/realview_pb/split_by_variant.sh
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	MAKELOGFILE
+#	board/armltd/realview_pb/u-boot.lds
+no changes added to commit (use "git add" and/or "git commit -a")
+for dir in tools examples/standalone examples/api ; do make -C $dir _depend ; done
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/tools'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/tools'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/tools'
+make[1]: Nothing to be done for `_depend'.
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/tools'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/standalone'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/standalone'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/standalone'
+examples/Makefile last resort rule
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/standalone'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/api'
+make[1]: Nothing to be done for `_depend'.
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/api'
+make -C tools all
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/tools'
+gcc  -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O   -o envcrc.o envcrc.c -c
+gcc -g -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o crc32.o /home/sda1/pbxa9/work/u-boot-armdev/lib_generic/crc32.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o env_embedded.o /home/sda1/pbxa9/work/u-boot-armdev/common/env_embedded.c
+gcc -g -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o sha1.o /home/sda1/pbxa9/work/u-boot-armdev/lib_generic/sha1.c
+gcc -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -o envcrc envcrc.o crc32.o env_embedded.o sha1.o
+gcc  -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O   -o gen_eth_addr.o gen_eth_addr.c -c
+gcc -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O  -o gen_eth_addr gen_eth_addr.o
+strip gen_eth_addr
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o mkimage.o /home/sda1/pbxa9/work/u-boot-armdev/tools/mkimage.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o image.o /home/sda1/pbxa9/work/u-boot-armdev/common/image.c
+gcc -g -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o md5.o /home/sda1/pbxa9/work/u-boot-armdev/lib_generic/md5.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o fdt.o /home/sda1/pbxa9/work/u-boot-armdev/libfdt/fdt.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o fdt_ro.o /home/sda1/pbxa9/work/u-boot-armdev/libfdt/fdt_ro.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o fdt_rw.o /home/sda1/pbxa9/work/u-boot-armdev/libfdt/fdt_rw.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o fdt_strerror.o /home/sda1/pbxa9/work/u-boot-armdev/libfdt/fdt_strerror.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o fdt_wip.o /home/sda1/pbxa9/work/u-boot-armdev/libfdt/fdt_wip.c
+gcc -g -Wall -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O -c -o os_support.o /home/sda1/pbxa9/work/u-boot-armdev/tools/os_support.c
+gcc -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include2 -idirafter /home/sda1/pbxa9/work/u-boot-armdev/include -I /home/sda1/pbxa9/work/u-boot-armdev/libfdt -I /home/sda1/pbxa9/work/u-boot-armdev/tools -DTEXT_BASE=0x01000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -O  -o mkimage mkimage.o crc32.o image.o md5.o sha1.o fdt.o fdt_ro.o fdt_rw.o fdt_strerror.o fdt_wip.o os_support.o
+strip mkimage
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/tools'
+make -C examples/standalone all
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/standalone'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o hello_world.o hello_world.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o atmel_df_pow2.o atmel_df_pow2.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o stubs.o stubs.c -c
+arm-none-eabi-ar crv libstubs.a stubs.o
+a - stubs.o
+arm-none-eabi-ld -g -Ttext 0xc100000 \
+		-o hello_world -e hello_world hello_world.o libstubs.a \
+		-L/home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3 -lgcc
+arm-none-eabi-objcopy -O srec hello_world hello_world.srec 2>/dev/null
+arm-none-eabi-ld -g -Ttext 0xc100000 \
+		-o atmel_df_pow2 -e atmel_df_pow2 atmel_df_pow2.o libstubs.a \
+		-L/home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3 -lgcc
+arm-none-eabi-objcopy -O srec atmel_df_pow2 atmel_df_pow2.srec 2>/dev/null
+arm-none-eabi-objcopy -O binary hello_world hello_world.bin 2>/dev/null
+arm-none-eabi-objcopy -O binary atmel_df_pow2 atmel_df_pow2.bin 2>/dev/null
+examples/Makefile last resort rule
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/standalone'
+make -C examples/api all
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/api'
+make[1]: Nothing to be done for `all'.
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/examples/api'
+make -C cpu/armct_rv start.o
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/cpu/armct_rv'
+arm-none-eabi-gcc -M -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector start.S interrupts.c cpu.c > .depend
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/cpu/armct_rv'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/cpu/armct_rv'
+arm-none-eabi-gcc   -D__ASSEMBLY__ -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu   -o start.o start.S -c
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/cpu/armct_rv'
+make -C lib_generic/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o crc16.o crc16.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o crc32.o crc32.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o ctype.o ctype.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o display_options.o display_options.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o div64.o div64.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o gunzip.o gunzip.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o lmb.o lmb.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o ldiv.o ldiv.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o sha1.o sha1.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o string.o string.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o strmhz.o strmhz.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o vsprintf.o vsprintf.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o zlib.o zlib.c -c
+arm-none-eabi-ar crv libgeneric.a crc16.o crc32.o ctype.o display_options.o div64.o gunzip.o lmb.o ldiv.o sha1.o string.o strmhz.o vsprintf.o zlib.o
+a - crc16.o
+a - crc32.o
+a - ctype.o
+a - display_options.o
+a - div64.o
+a - gunzip.o
+a - lmb.o
+a - ldiv.o
+a - sha1.o
+a - string.o
+a - strmhz.o
+a - vsprintf.o
+a - zlib.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic'
+make -C lib_generic/lzma/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic/lzma'
+arm-none-eabi-ar crv liblzma.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic/lzma'
+make -C lib_generic/lzo/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic/lzo'
+arm-none-eabi-ar crv liblzo.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_generic/lzo'
+make -C cpu/armct_rv/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/cpu/armct_rv'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o interrupts.o interrupts.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cpu.o cpu.c -c
+arm-none-eabi-ar crv libarmct_rv.a interrupts.o cpu.o
+a - interrupts.o
+a - cpu.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/cpu/armct_rv'
+make -C lib_arm/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_arm'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_arm'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_arm'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o board.o board.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o bootm.o bootm.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cache.o cache.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cache-cp15.o cache-cp15.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o interrupts.o interrupts.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o reset.o reset.c -c
+arm-none-eabi-ar crv libarm.a board.o bootm.o cache.o cache-cp15.o interrupts.o reset.o
+a - board.o
+a - bootm.o
+a - cache.o
+a - cache-cp15.o
+a - interrupts.o
+a - reset.o
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o eabi_compat.o eabi_compat.c -c
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/lib_arm'
+make -C fs/cramfs/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/cramfs'
+arm-none-eabi-ar crv libcramfs.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/cramfs'
+make -C fs/fat/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/fat'
+arm-none-eabi-ar crv libfat.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/fat'
+make -C fs/fdos/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/fdos'
+arm-none-eabi-ar crv libfdos.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/fdos'
+make -C fs/jffs2/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/jffs2'
+arm-none-eabi-ar crv libjffs2.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/jffs2'
+make -C fs/reiserfs/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/reiserfs'
+arm-none-eabi-ar crv libreiserfs.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/reiserfs'
+make -C fs/ext2/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/ext2'
+arm-none-eabi-ar crv libext2fs.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/ext2'
+make -C fs/yaffs2/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/yaffs2'
+arm-none-eabi-ar crv libyaffs2.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/yaffs2'
+make -C fs/ubifs/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/ubifs'
+arm-none-eabi-ar crv libubifs.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/fs/ubifs'
+make -C net/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/net'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/net'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/net'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o bootp.o bootp.c -c
+bootp.c: In function 'BootpCopyNetParams':
+bootp.c:109: warning: unused variable 'tmp_ip'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o eth.o eth.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o net.o net.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o nfs.o nfs.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o rarp.o rarp.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o tftp.o tftp.c -c
+arm-none-eabi-ar crv libnet.a bootp.o eth.o net.o nfs.o rarp.o tftp.o
+a - bootp.o
+a - eth.o
+a - net.o
+a - nfs.o
+a - rarp.o
+a - tftp.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/net'
+make -C disk/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/disk'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/disk'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/disk'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o part.o part.c -c
+arm-none-eabi-ar crv libdisk.a part.o
+a - part.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/disk'
+make -C drivers/bios_emulator/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/bios_emulator'
+arm-none-eabi-ar crv libatibiosemu.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/bios_emulator'
+make -C drivers/block/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/block'
+arm-none-eabi-ar crv libblock.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/block'
+make -C drivers/dma/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/dma'
+arm-none-eabi-ar crv libdma.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/dma'
+make -C drivers/fpga/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/fpga'
+arm-none-eabi-ar crv libfpga.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/fpga'
+make -C drivers/gpio/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/gpio'
+arm-none-eabi-ar crv libgpio.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/gpio'
+make -C drivers/hwmon/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/hwmon'
+arm-none-eabi-ar crv libhwmon.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/hwmon'
+make -C drivers/i2c/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/i2c'
+arm-none-eabi-ar crv libi2c.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/i2c'
+make -C drivers/input/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/input'
+arm-none-eabi-ar crv libinput.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/input'
+make -C drivers/misc/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/misc'
+arm-none-eabi-ar crv libmisc.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/misc'
+make -C drivers/mmc/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mmc'
+arm-none-eabi-ar crv libmmc.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mmc'
+make -C drivers/mtd/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cfi_flash.o cfi_flash.c -c
+arm-none-eabi-ar crv libmtd.a cfi_flash.o
+a - cfi_flash.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd'
+make -C drivers/mtd/nand/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/nand'
+arm-none-eabi-ar crv libnand.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/nand'
+make -C drivers/mtd/onenand/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/onenand'
+arm-none-eabi-ar crv libonenand.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/onenand'
+make -C drivers/mtd/ubi/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/ubi'
+arm-none-eabi-ar crv libubi.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/ubi'
+make -C drivers/mtd/spi/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/spi'
+arm-none-eabi-ar crv libspi_flash.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/mtd/spi'
+make -C drivers/net/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o smc_rv.o smc_rv.c -c
+arm-none-eabi-ar crv libnet.a smc_rv.o
+a - smc_rv.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net'
+make -C drivers/net/phy/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net/phy'
+arm-none-eabi-ar crv libphy.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net/phy'
+make -C drivers/net/sk98lin/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net/sk98lin'
+arm-none-eabi-ar crv libsk98lin.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/net/sk98lin'
+make -C drivers/pci/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/pci'
+arm-none-eabi-ar crv libpci.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/pci'
+make -C drivers/pcmcia/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/pcmcia'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/pcmcia'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/pcmcia'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o rpx_pcmcia.o rpx_pcmcia.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o tqm8xx_pcmcia.o tqm8xx_pcmcia.c -c
+arm-none-eabi-ar crv libpcmcia.a rpx_pcmcia.o tqm8xx_pcmcia.o
+a - rpx_pcmcia.o
+a - tqm8xx_pcmcia.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/pcmcia'
+make -C drivers/power/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/power'
+arm-none-eabi-ar crv libpower.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/power'
+make -C drivers/spi/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/spi'
+arm-none-eabi-ar crv libspi.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/spi'
+make -C drivers/rtc/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/rtc'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/rtc'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/rtc'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o date.o date.c -c
+arm-none-eabi-ar crv librtc.a date.o
+a - date.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/rtc'
+make -C drivers/serial/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/serial'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/serial'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/serial'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o serial_pl01x.o serial_pl01x.c -c
+arm-none-eabi-ar crv libserial.a serial_pl01x.o
+a - serial_pl01x.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/serial'
+make -C drivers/twserial/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/twserial'
+arm-none-eabi-ar crv libtws.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/twserial'
+make -C drivers/usb/gadget/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/usb/gadget'
+arm-none-eabi-ar crv libusb_gadget.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/usb/gadget'
+make -C drivers/usb/host/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/usb/host'
+arm-none-eabi-ar crv libusb_host.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/usb/host'
+make -C drivers/usb/musb/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/usb/musb'
+arm-none-eabi-ar crv libusb_musb.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/usb/musb'
+make -C drivers/video/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/video'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/video'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/video'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o videomodes.o videomodes.c -c
+arm-none-eabi-ar crv libvideo.a videomodes.o
+a - videomodes.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/video'
+make -C drivers/watchdog/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/watchdog'
+arm-none-eabi-ar crv libwatchdog.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/drivers/watchdog'
+make -C common/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/common'
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/common'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/common'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o circbuf.o circbuf.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_bdinfo.o cmd_bdinfo.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_boot.o cmd_boot.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_bootm.o cmd_bootm.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_flash.o cmd_flash.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_load.o cmd_load.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_mem.o cmd_mem.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_nand.o cmd_nand.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_net.o cmd_net.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_nvedit.o cmd_nvedit.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o cmd_pcmcia.o cmd_pcmcia.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o command.o command.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o console.o console.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o dlmalloc.o dlmalloc.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o env_common.o env_common.c -c
+arm-none-eabi-gcc  -D__ASSEMBLY__ -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wa,--no-warn \
+	-DENV_CRC=0 \
+	-c -o env_embedded.o env_embedded.c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o env_flash.o env_flash.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o exports.o exports.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o flash.o flash.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o image.o image.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o main.o main.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o memsize.o memsize.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o s_record.o s_record.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o stdio.o stdio.c -c
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o xyzModem.o xyzModem.c -c
+arm-none-eabi-ar crv libcommon.a circbuf.o cmd_bdinfo.o cmd_boot.o cmd_bootm.o cmd_flash.o cmd_load.o cmd_mem.o cmd_nand.o cmd_net.o cmd_nvedit.o cmd_pcmcia.o command.o console.o dlmalloc.o env_common.o env_embedded.o env_flash.o exports.o flash.o image.o main.o memsize.o s_record.o stdio.o xyzModem.o
+a - circbuf.o
+a - cmd_bdinfo.o
+a - cmd_boot.o
+a - cmd_bootm.o
+a - cmd_flash.o
+a - cmd_load.o
+a - cmd_mem.o
+a - cmd_nand.o
+a - cmd_net.o
+a - cmd_nvedit.o
+a - cmd_pcmcia.o
+a - command.o
+a - console.o
+a - dlmalloc.o
+a - env_common.o
+a - env_embedded.o
+a - env_flash.o
+a - exports.o
+a - flash.o
+a - image.o
+a - main.o
+a - memsize.o
+a - s_record.o
+a - stdio.o
+a - xyzModem.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/common'
+make -C libfdt/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/libfdt'
+arm-none-eabi-ar crv libfdt.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/libfdt'
+make -C api/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/api'
+arm-none-eabi-ar crv libapi.a 
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/api'
+make -C post/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/post'
+(echo create libpost.a; for lib in   ; \
+ do echo addlib $lib; done; echo save) \
+| arm-none-eabi-ar -M
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/post'
+make -C board/armltd/realview_pb/
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb'
+arm-none-eabi-gcc -M -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu lowlevel_init.S realview_pb.c > .depend
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb'
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb'
+arm-none-eabi-gcc  -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -Wall -Wstrict-prototypes -fno-stack-protector   -o realview_pb.o realview_pb.c -c
+arm-none-eabi-gcc   -D__ASSEMBLY__ -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu   -o lowlevel_init.o lowlevel_init.S -c
+arm-none-eabi-ar crv librealview_pb.a realview_pb.o lowlevel_init.o
+a - realview_pb.o
+a - lowlevel_init.o
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb'
+make -C /home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb/ u-boot.lds
+make[1]: Entering directory `/home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb'
+make[1]: Nothing to be done for `u-boot.lds'.
+make[1]: Leaving directory `/home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb'
+arm-none-eabi-gcc -E -g  -Os   -fno-strict-aliasing  -fno-common -ffixed-r8  -D__KERNEL__ -DTEXT_BASE=0x01000000 -I/home/sda1/pbxa9/work/u-boot-armdev/include -fno-builtin -ffreestanding -nostdinc -isystem /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv4 -mno-thumb-interwork -mabi=apcs-gnu -include /home/sda1/pbxa9/work/u-boot-armdev/include/u-boot/u-boot.lds.h  -ansi -D__ASSEMBLY__ -P - </home/sda1/pbxa9/work/u-boot-armdev/board/armltd/realview_pb/u-boot.lds >u-boot.lds
+UNDEF_SYM=`arm-none-eabi-objdump -x board/armltd/realview_pb/librealview_pb.a lib_generic/libgeneric.a lib_generic/lzma/liblzma.a lib_generic/lzo/liblzo.a cpu/armct_rv/libarmct_rv.a lib_arm/libarm.a fs/cramfs/libcramfs.a fs/fat/libfat.a fs/fdos/libfdos.a fs/jffs2/libjffs2.a fs/reiserfs/libreiserfs.a fs/ext2/libext2fs.a fs/yaffs2/libyaffs2.a fs/ubifs/libubifs.a net/libnet.a disk/libdisk.a drivers/bios_emulator/libatibiosemu.a drivers/block/libblock.a drivers/dma/libdma.a drivers/fpga/libfpga.a drivers/gpio/libgpio.a drivers/hwmon/libhwmon.a drivers/i2c/libi2c.a drivers/input/libinput.a drivers/misc/libmisc.a drivers/mmc/libmmc.a drivers/mtd/libmtd.a drivers/mtd/nand/libnand.a drivers/mtd/onenand/libonenand.a drivers/mtd/ubi/libubi.a drivers/mtd/spi/libspi_flash.a drivers/net/libnet.a drivers/net/phy/libphy.a drivers/net/sk98lin/libsk98lin.a drivers/pci/libpci.a drivers/pcmcia/libpcmcia.a drivers/power/libpower.a drivers/spi/libspi.a drivers/rtc/librtc.a drivers/serial/libserial.a drivers/twserial/libtws.a drivers/usb/gadget/libusb_gadget.a drivers/usb/host/libusb_host.a drivers/usb/musb/libusb_musb.a drivers/video/libvideo.a drivers/watchdog/libwatchdog.a common/libcommon.a libfdt/libfdt.a api/libapi.a post/libpost.a | sed  -n -e 's/.*\(__u_boot_cmd_.*\)/-u\1/p'|sort|uniq`; cd /home/sda1/pbxa9/work/u-boot-armdev && arm-none-eabi-ld -Bstatic -T u-boot.lds  -Ttext 0x01000000 $UNDEF_SYM cpu/armct_rv/start.o --start-group lib_generic/libgeneric.a lib_generic/lzma/liblzma.a lib_generic/lzo/liblzo.a cpu/armct_rv/libarmct_rv.a lib_arm/libarm.a fs/cramfs/libcramfs.a fs/fat/libfat.a fs/fdos/libfdos.a fs/jffs2/libjffs2.a fs/reiserfs/libreiserfs.a fs/ext2/libext2fs.a fs/yaffs2/libyaffs2.a fs/ubifs/libubifs.a net/libnet.a disk/libdisk.a drivers/bios_emulator/libatibiosemu.a drivers/block/libblock.a drivers/dma/libdma.a drivers/fpga/libfpga.a drivers/gpio/libgpio.a drivers/hwmon/libhwmon.a drivers/i2c/libi2c.a drivers/input/libinput.a drivers/misc/libmisc.a drivers/mmc/libmmc.a drivers/mtd/libmtd.a drivers/mtd/nand/libnand.a drivers/mtd/onenand/libonenand.a drivers/mtd/ubi/libubi.a drivers/mtd/spi/libspi_flash.a drivers/net/libnet.a drivers/net/phy/libphy.a drivers/net/sk98lin/libsk98lin.a drivers/pci/libpci.a drivers/pcmcia/libpcmcia.a drivers/power/libpower.a drivers/spi/libspi.a drivers/rtc/librtc.a drivers/serial/libserial.a drivers/twserial/libtws.a drivers/usb/gadget/libusb_gadget.a drivers/usb/host/libusb_host.a drivers/usb/musb/libusb_musb.a drivers/video/libvideo.a drivers/watchdog/libwatchdog.a common/libcommon.a libfdt/libfdt.a api/libapi.a post/libpost.a board/armltd/realview_pb/librealview_pb.a --end-group /home/sda1/pbxa9/work/u-boot-armdev/lib_arm/eabi_compat.o -L /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3 -lgcc -Map u-boot.map -o u-boot
+arm-none-eabi-ld: error: Source object /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_udivsi3.o) has EABI version 5, but target u-boot has EABI version 0
+arm-none-eabi-ld: failed to merge target specific data of file /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_udivsi3.o)
+arm-none-eabi-ld: error: Source object /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_divsi3.o) has EABI version 5, but target u-boot has EABI version 0
+arm-none-eabi-ld: failed to merge target specific data of file /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_divsi3.o)
+arm-none-eabi-ld: error: Source object /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_umodsi3.o) has EABI version 5, but target u-boot has EABI version 0
+arm-none-eabi-ld: failed to merge target specific data of file /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_umodsi3.o)
+arm-none-eabi-ld: error: Source object /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_modsi3.o) has EABI version 5, but target u-boot has EABI version 0
+arm-none-eabi-ld: failed to merge target specific data of file /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_modsi3.o)
+arm-none-eabi-ld: error: Source object /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_dvmd_tls.o) has EABI version 5, but target u-boot has EABI version 0
+arm-none-eabi-ld: failed to merge target specific data of file /home/sda1/pbxa9/CodeSourcery/eabi/arm-2009q1/bin/../lib/gcc/arm-none-eabi/4.3.3/libgcc.a(_dvmd_tls.o)
+make: *** [u-boot] 错误 1

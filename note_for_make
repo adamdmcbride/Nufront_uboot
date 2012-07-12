@@ -1,0 +1,9 @@
+1.make sure those 2 lines in your .bash_profile:
+CROSS_COMPILE=arm-none-eabi-
+export CROSS_COMPILE
+
+make distclean
+
+USE_PRIVATE_LIBGCC=yes make ns2816_demo_config
+
+USE_PRIVATE_LIBGCC=yes make 
