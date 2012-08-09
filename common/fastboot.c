@@ -59,6 +59,16 @@ static void wait_cycle(int n);
 
 static struct bootsel bootsel;
 
+struct FastbootArgs {
+    int b_quit_fastboot;
+    int b_is_upload_partition_config;
+};
+
+static struct FastbootArgs  fastbootArgs;
+
+void init_fastboot(struct FastbootArgs* args) {
+    memset(args, sizeof(struct FastbootArgs), 0);
+}
 /********************************/
 // zx fastboot
 
@@ -104,9 +114,10 @@ void read_boot_ptn(unsigned int size)
         char sep = '\n';
 	const char *addr = 0x91000000;
 
-	if(_xloader_boot_mode == 0x02){
+	//if(_xloader_boot_mode == 0x02){
+    if (fastbootArgs.b_is_upload_partition_config) {
         	readsize = size;
-        }else{
+    }else{
 	//	struct bootsel bootsel;
 		char *ext4_load[5]  = { "do_ext4_load","mmc","1:7","0x91000000","partition_config", };
 		readsize = do_ext4_load(NULL,0,5,ext4_load);
@@ -167,7 +178,7 @@ unsigned int fastboot_flash_get_ptn_count(void)
     return pcount;
 }
 
-void board_mmc_init(unsigned int size )
+void board_mmc_init(unsigned int size)
 {
 #ifdef CONFIG_NS115_PAD_REF
 	read_boot_ptn(size);
@@ -232,13 +243,19 @@ void board_mmc_init(unsigned int size )
         {
             .name   = "logo32",
             .start  = 5210,  /* Sector Start */
-            .length = 1*1024*1024, /*1M */
+            .length = 750*1024, /*750K */
+            .flags  = 0,
+        },
+        {
+            .name   = "fastbootlogo16",
+            .start  = 7000,  /* Sector Start */
+            .length = 500*1024, /*500K */
             .flags  = 0,
         },
         {
             .name   = "logo16",
             .start  = 8800,  /* Sector Start */
-            .length = 1*1024*1024, /*1M */
+            .length = 500*1024, /*500K */
             .flags  = 0,
         },
         {
@@ -700,7 +717,6 @@ static void fastboot_out(const char* msg) {
 }
 
 
-static int b_quit_fastboot = 0;
 
 static void handle_fastboot(unsigned char * buf, unsigned int len)
 {
@@ -802,6 +818,7 @@ static void handle_fastboot(unsigned char * buf, unsigned int len)
 		fastboot_ack("DATA", tmp);
 	}
 	else if(!strncmp(buf,"partition",9)){
+        fastbootArgs.b_is_upload_partition_config = 1;
 		board_mmc_init(dlsize);
 		fastboot_okay(NULL);
 	}
@@ -913,12 +930,26 @@ static void handle_fastboot(unsigned char * buf, unsigned int len)
 		}
 	//	fastboot_okay(NULL);
 	}
-	else if (!memcmp(buf, "reboot", 6) ||
+	else if (!strncmp(buf, "reboot", 6) ||
 			!memcmp(buf, "reboot-bootloader", 17)) {
 		printf("will reset ...\n");
 		fastboot_okay("will reboot ...");
 		do_reset(NULL, 0, 0, NULL);  
 	}
+    else if (!strncmp(buf, "erase", 5)) {
+        static const char* const mmc_init[] = {"mmc", "init", "1"};
+        static const char* const mmc_erase[] = {"mmc", "write", "1", "0x80007fc0", "4096", "1212" };
+        static const char* const reset_cmd[] = {"reset"};
+        do_mmc(NULL, 0, 3, mmc_init);
+        do_mmc(NULL, 0, 6, mmc_erase);
+        fastboot_okay("erase completed");
+        do_reset(NULL, 0, 1, reset_cmd);
+    }
+    else if (!strncmp(buf, "exit", 4)) {
+        fastboot_okay("will quit.");
+        fastbootArgs.b_quit_fastboot = 1;
+        return 0;
+    }
 	else
 	{
 		printf("'%s' Invalid command!", buf);
@@ -987,6 +1018,10 @@ static void handle_setup(unsigned char *rev_buf)
 static void init_serial_no() {
     extern unsigned char _nufront_serial_no;
     unsigned char* pSerialNo = &_nufront_serial_no;
+    if (pSerialNo[0] == 0) {
+        printf("serial id is fastboot\n");
+        return;
+    }
 
     int n = *((char*)pSerialNo) + 4;
     if (n < 256) 
@@ -1003,6 +1038,8 @@ static void init_serial_no() {
 
 int do_fastboot (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 {	
+    init_fastboot(&fastbootArgs);
+
 	int partitionsize = 0;
 	board_mmc_init(partitionsize);    
     	init_serial_no();
@@ -1028,8 +1065,8 @@ int do_fastboot (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 	PDBG("USB INIT ...\n");
 	usb_dev_init();
 
-	while(1) {
-		while(1) {
+	while(!fastbootArgs.b_quit_fastboot) {
+		while(!fastbootArgs.b_quit_fastboot) {
 			int0 = usb_readl(DOEPINT0);
 			int1 = usb_readl(DOEPINT1);
 			usb_writel(DOEPINT0,int0);  //Clear

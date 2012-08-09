@@ -30,7 +30,7 @@ static char bootcmd_recovery[] = "run default_bootargs;ext4load mmc 1:8 0x80007f
 static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS0,115200 init=/init video=nusmartfb:1024x600-${dispformat} androidboot.mode=charger";
 
 static unsigned int recovery_flag = 0;
-static unsigned int fastboot_flag = 0;
+unsigned int fastboot_flag = 0;
 extern int do_ext4_load(cmd_tbl_t *cmdtp, int flag, int argc,char *const argv[]);
 
 
@@ -221,6 +221,45 @@ ulong get_timer_masked (void)
 }
 
 #define NS115_I2C1_BASE 0x06110000
+void power_key_delay()
+{
+	unsigned char rbuf[4];
+	unsigned char wbuf[4];
+	unsigned char rbuf_11[4];
+	unsigned char wbuf_11[4];
+
+	rbuf[0] = 0x00;
+	wbuf[0] = 0x1b;
+
+	rbuf_11[0] = 0x00;
+	wbuf_11[0] = 0x11;
+
+	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+	dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
+	dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf_11,1,rbuf_11,1);
+	printf("rbuf[0] = 0x%x %d\n",rbuf[0],__LINE__);
+	printf("rbuf_11[0] = 0x%x %d\n",rbuf_11[0],__LINE__);
+	if((rbuf_11[0] & 0x01) == 0x01){
+		if((!(rbuf[0]  & 0x01))) 
+		{
+			wbuf[0] = 0x13;
+			wbuf[1] = 0x01;
+			dw_i2c_send_bytes(NS115_I2C1_BASE,wbuf,2);
+		}
+		udelay(2000000);
+		dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
+		if((!(rbuf[0]  & 0x1)))
+//		if((!(rbuf[0]  & 0x01)) && (rbuf_11[0] & 0x01) == 0x01)
+		{
+			wbuf[0] = 0x13;
+			wbuf[1] = 0x01;
+			dw_i2c_send_bytes(NS115_I2C1_BASE,wbuf,2);
+		}
+	} else {
+		return 0;
+	}
+}
+
 static int charge_status()
 {
 	unsigned char rbuf[4];
@@ -242,7 +281,7 @@ static int charge_status()
         	printf("ERROR: read PMIC register failed\r\n");
         	return;
     	}
-	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+//	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
 	
 	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf_12,1,rbuf_12,1);
     	if(ret){

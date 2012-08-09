@@ -73,6 +73,8 @@ extern void dataflash_print_info(void);
 #define CONFIG_IDENT_STRING ""
 #endif
 
+extern int  fastboot_flag;
+
 const char version_string[] =
 	U_BOOT_VERSION" (" U_BOOT_DATE " - " U_BOOT_TIME ")"CONFIG_IDENT_STRING;
 
@@ -409,6 +411,7 @@ void start_armboot (void)
 	/* configure available FLASH banks */
 	display_flash_config (flash_init ());
 #endif /* CONFIG_SYS_NO_FLASH */
+	power_key_delay();
 
 #ifdef CONFIG_VFD
 #	ifndef PAGE_SIZE
@@ -478,25 +481,33 @@ void start_armboot (void)
 		disp_flag = 1;
 	}
 
-	char *mmc_read[6];
-	if(disp_flag == 0){	//16bit
+	if(fastboot_flag == 1){
 		if(mmc_cont == 0){
-	 		char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","8800","1000" };
+			char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","7000","1000" };
 			do_mmc(NULL, 0, 6, mmc_read);
 		}else if(mmc_cont == 1) {
-	 		char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","8800","1000" };
+			char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","7000","1000" };
 			do_mmc(NULL, 0, 6, mmc_read);
 		}
-	}else if(disp_flag == 1){	//32bit
-		if(mmc_cont == 0){
-	 		char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","5210","1500" };
-			do_mmc(NULL, 0, 6, mmc_read);
-		}else if(mmc_cont == 1) {
-	 		char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","5210","1500" };
-			do_mmc(NULL, 0, 6, mmc_read);
+	} else {
+		if(disp_flag == 0){	//16bit
+			if(mmc_cont == 0){
+	 			char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","8800","1000" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}else if(mmc_cont == 1) {
+	 			char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","8800","1000" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}
+		}else if(disp_flag == 1){	//32bit
+			if(mmc_cont == 0){
+	 			char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","5210","1500" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}else if(mmc_cont == 1) {
+	 			char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","5210","1500" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}
 		}
-	}
-
+	}	
 #ifdef CONFIG_VFD
 	/* must do this after the framebuffer is allocated */
 	drv_vfd_init();

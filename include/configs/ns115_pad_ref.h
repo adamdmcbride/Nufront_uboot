@@ -125,6 +125,7 @@
 #define CONFIG_BOOTP_SERVERIP
 
 #define CONFIG_BOOTDELAY	2
+#define CONFIG_SERIAL_TAG
 
 /*
  * Static configuration when assigning fixed address
@@ -145,7 +146,7 @@
 #define CONFIG_SYS_CBSIZE	256		/* Console I/O Buffer Size	*/
 /* Monitor Command Prompt   */
 #define CONFIG_SYS_PROMPT	"NS115_PAD_REF # "
-#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD REF Board V3.3***\n\n"
+#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD REF Board V3.6***\n\n"
 //#define CONFIG_FASTBOOT_GET_VAR_BASEBAND_STRING "NS115"
 #define CONFIG_FASTBOOT_GETVAR_VERSION  "NS115"
 /* Print Buffer Size */

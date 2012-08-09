@@ -36,6 +36,7 @@
 
 #include <common.h>
 #include <command.h>
+#include <asm-arm/setup.h>
 
 #if defined(CONFIG_USE_IRQ) || defined (CONFIG_REALVIEW)
 DECLARE_GLOBAL_DATA_PTR;
@@ -184,4 +185,31 @@ void update_freq()
 }
 
 
+void get_board_serial(struct tag_serialnr *serialnr) {
+    // efuse register define.
+    volatile unsigned int* preg_status = 0x06160100;
+    volatile unsigned int* preg_cen = 0x06160104;
+    volatile unsigned int* preg_req = 0x0616010c;
+    volatile unsigned int* preg_addr = 0x06160108;
+    volatile unsigned int* preg_data = 0x06160110;
+    volatile unsigned int* preg_intmask = 0x06160128;
+    volatile unsigned int* preg_intunmask = 0x0616012C;
+    volatile unsigned int* preg_int  = 0x06160124;
+    
+    if ((*preg_status) & 07 != 0b11) {
+        *preg_cen    = 0;
+        *preg_cen   |= 1;
+    }
 
+    *preg_addr       = ((1024 / 8) | 07 << 9);
+    *preg_req       |= 1;
+    *preg_intmask   |= 1;
+    
+    while((*preg_int & 1) == 0) ;    // wait interrupt.
+
+    serialnr->low   = preg_data[0];
+    serialnr->high  = preg_data[1];
+
+    //serialnr->low = 0xc5b80012;
+    //serialnr->high = 0x000000c7;    
+} 
