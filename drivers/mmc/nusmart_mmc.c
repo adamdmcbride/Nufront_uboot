@@ -619,6 +619,25 @@ unsigned char configure_mmc(mmc_card_data *mmc_card_cur,mmc_controller_data *mmc
 	}else{
 		SDIOHost_SetBusWidth(mmc_card_cur,mmc_contr_cur,8);
 	}
+	
+	/* wait card ready */
+	retries = 20;
+	do{
+		err = sdmmc_send_cmd(mmc_card_cur,mmc_contr_cur,MMC_CMD13,
+				mmc_card_cur->RCA << 16,resp);
+		if(err != 1)
+			continue;
+
+		if((mmc_card_cur->response[0] & 0x100)
+			&& ((mmc_card_cur->response[0] >> 9) & 0xf) <= 4){
+			break;
+		}
+	}while(--retries >= 0);
+
+	if(retries == 0)
+	{
+		printf("Failed to wait card ready,after switch bus width\n");
+	}
 	mmc_contr_cur->io->SRS13 = srs13;
 
 

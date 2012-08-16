@@ -74,7 +74,7 @@ void init_fastboot(struct FastbootArgs* args) {
 
 //#define FASTLOG(fmt, args...)  printf("zx, fastboot host: " fmt "\n", ##args)
 #define FASTLOG(fmt, args...)
-#define MAX_PTN 16
+#define MAX_PTN 20
 
 #if 1
 struct fastboot_ptentry {
@@ -185,7 +185,7 @@ void board_mmc_init(unsigned int size)
  	fastboot_flash_reset_ptn();
 #endif
     /* Partitons on EMMC preasent on OMAP4SDP required for Fastboot*/
-    struct fastboot_ptentry ptn[] = {
+    struct fastboot_ptentry ptn[MAX_PTN] = {
         {
             .name   = "mbr",
             .start  = 0, /*Sector Start */
@@ -274,8 +274,8 @@ void board_mmc_init(unsigned int size)
         {
             .name   = "system",
             .start  = fastboot_ptn.systemstart,  /*11,444,288 Sector Start */
-            //.length = 256*1024*1024, /*256MB */
-            .length = 524351 * 512, 
+            .length = 350*1024*1024, /*256MB */
+            //.length = 524351 * 512, 
             .flags  = 0,
         },
         {
