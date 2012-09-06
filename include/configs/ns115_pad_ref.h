@@ -85,7 +85,7 @@
  */
 #define CONFIG_CMD_BDI
 #define CONFIG_CMD_USB
-#define CONFIG_CMD_DHCP
+//#define CONFIG_CMD_DHCP
 #define CONFIG_CMD_ENV
 //#define CONFIG_CMD_FLASH
 //#define CONFIG_CMD_IMI
@@ -95,7 +95,7 @@
 #define CONFIG_CMD_SAVEENV
 #define CONFIG_NET_MULTI
 #define CONFIG_CMD_RUN
-#define CONFIG_CMD_EXT2
+//#define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
 #define CONFIG_CMD_LOADB
 #define CONFIG_CMD_BRINGUP
@@ -111,8 +111,8 @@
 #define CONFIG_CMD_AUTOSCRIPT
 #define CONFIG_SYS_PROMPT_HUSH_PS2      "> "
 
-#define CONFIG_USB_ETHER_ASIX
-#define CONFIG_USB_HOST_ETHER
+//#define CONFIG_USB_ETHER_ASIX
+//#define CONFIG_USB_HOST_ETHER
 
 /*
  * BOOTP options
@@ -130,9 +130,9 @@
 /*
  * Static configuration when assigning fixed address
  */
-#define CONFIG_NETMASK  255.255.255.0
-#define CONFIG_IPADDR   192.168.22.240    
-#define CONFIG_SERVERIP 192.168.22.113
+//#define CONFIG_NETMASK  255.255.255.0
+//#define CONFIG_IPADDR   192.168.22.240    
+//#define CONFIG_SERVERIP 192.168.22.113
 #define CONFIG_BOOTFILE uImage 
 //#define CONFIG_GATEWAYIP 192.168.22.1
 #define CONFIG_STDIN serial
@@ -146,7 +146,7 @@
 #define CONFIG_SYS_CBSIZE	256		/* Console I/O Buffer Size	*/
 /* Monitor Command Prompt   */
 #define CONFIG_SYS_PROMPT	"NS115_PAD_REF # "
-#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD REF Board V3.7***\n\n"
+#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD REF Board V3.8***\n\n"
 //#define CONFIG_FASTBOOT_GET_VAR_BASEBAND_STRING "NS115"
 #define CONFIG_FASTBOOT_GETVAR_VERSION  "NS115"
 /* Print Buffer Size */
@@ -161,7 +161,7 @@
 	"dispformat=16\0"       \
         "splashimage=0x80007fc0\0"      \
         "bootcmd=run default_bootargs;ext4load mmc 1:2 0x80007fc0 uImage;bootm\0"       \
-        "default_bootargs=setenv bootargs console=ttyS0,115200 root=/dev/mmcblk1p2 rw rootwait mem=776M video=nusmartfb:1024x600-${dispformat} init=/init\0" \
+        "default_bootargs=setenv bootargs console=ttyS0,115200 root=/dev/mmcblk1p2 rw rootwait mem=824M video=nusmartfb:1024x600-${dispformat} init=/init\0" \
         "mmcupdate=fatload mmc 0:1 0x80007fc0 mmc_update;autoscr 0x80007fc0\0"  \
         "usbupdate=fatload usb 0:1 0x80007fc0 usb_update;autoscr 0x80007fc0\0"  \
         "splashpos=m,m         \0"   

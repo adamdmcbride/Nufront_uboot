@@ -29,6 +29,7 @@ static char bootargs_recovery[] = "set bootargs root=/dev/mmcblk1p8 rw rootwait 
 static char bootcmd_recovery[] = "run default_bootargs;ext4load mmc 1:8 0x80007fc0 uImage_recovery;bootm";
 static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS0,115200 init=/init video=nusmartfb:1024x600-${dispformat} androidboot.mode=charger";
 
+#define NUFRONT_LCD1_BASE 0xB4800000
 static unsigned int recovery_flag = 0;
 unsigned int fastboot_flag = 0;
 extern int do_ext4_load(cmd_tbl_t *cmdtp, int flag, int argc,char *const argv[]);
@@ -67,6 +68,7 @@ int board_init (void)
 	writel(0x0,0x05822004);    
 	writel(0x01000000,0x05822008);
 
+	memset (NUFRONT_LCD1_BASE, 0x0, 0x00200000);
 	gpio_pinmux_config(86);         //CAM_PWR_EN;gpioc22
 	nufront_set_gpio_value(86,1);
 
@@ -246,7 +248,7 @@ void power_key_delay()
 			wbuf[1] = 0x01;
 			dw_i2c_send_bytes(NS115_I2C1_BASE,wbuf,2);
 		}
-		udelay(2000000);
+		udelay(1000000);
 		dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
 		if((!(rbuf[0]  & 0x1)))
 //		if((!(rbuf[0]  & 0x01)) && (rbuf_11[0] & 0x01) == 0x01)

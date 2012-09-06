@@ -423,7 +423,7 @@ void start_armboot (void)
 	/* bss_end is defined in the board-specific linker script */
 	addr = (_bss_end + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1);
 	vfd_setmem (addr);
-	gd->fb_base = 0xb0800000;
+	gd->fb_base = 0xb3800000;
 //	gd->fb_base = getenv("fbaddr");
 #endif /* CONFIG_VFD */
 
@@ -441,7 +441,7 @@ void start_armboot (void)
 		//addr = 0xF7000000;
 		lcd_setmem (addr);
 		unsigned int *a = getenv("fbaddr");
-		gd->fb_base = 0xb0800000;
+		gd->fb_base = 0xb3800000;
 //		gd->fb_base = addr;
 	}
 #endif /* CONFIG_LCD */
