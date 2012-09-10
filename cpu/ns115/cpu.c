@@ -37,6 +37,10 @@
 #include <common.h>
 #include <command.h>
 #include <asm-arm/setup.h>
+#include <timestamp.h>
+
+
+#define READ_TIMER (*(volatile ulong *)(CONFIG_SYS_TIMERBASE+4))
 
 #if defined(CONFIG_USE_IRQ) || defined (CONFIG_REALVIEW)
 DECLARE_GLOBAL_DATA_PTR;
@@ -184,32 +188,110 @@ void update_freq()
 	do_ns115(NULL, 0, 6, ns115_gc);
 }
 
+#if 1
+#define zxdebug(fmt, args...)   printf(fmt, ##args)
+#else
+#define zxdebug(...)
+#endif
+
+
+#define RANDOM_MAX 0x7FFFFFFF
+static unsigned int next = 1;
+
+/* return value no more than 2^31 - 1;
+ * 2^31 - 1 = 0x7fffffff;
+ * 127773 * (7^5) + 2836,7^5 = 16807 ;
+ * t = (7^5 * t) mod (2^31 - 1);
+ */
+static unsigned int random_serial(unsigned int value)
+{
+	unsigned int quotient, remainder, t;
+
+	quotient = value / 127773;
+	remainder = value % 127773;
+	t = 16807 * remainder - 2836 * quotient;
+
+	
+	if (t <= 0)
+		t += 0x7FFFFFFF;
+		return ((value = t) % ((unsigned int)RANDOM_MAX + 1));
+}
+
+static void srand_serial(unsigned int seed)
+{
+	next = seed;
+}
+
+
+void get_cpu_efuse_data(unsigned int* low, unsigned int* high) {
+
+    	// efuse register define.
+	volatile unsigned int* preg_status    = 0x06160100;
+	volatile unsigned int* preg_cen       = 0x06160104;
+	volatile unsigned int* preg_addr      = 0x0616010c;
+	volatile unsigned int* preg_req       = 0x06160108;
+	volatile unsigned int* preg_data      = 0x06160110;
+	volatile unsigned int* preg_intmask   = 0x06160120;
+	volatile unsigned int* preg_intunmask = 0x0616012C;
+	volatile unsigned int* preg_int       = 0x05041d0c;
+
+	unsigned int start_sector_no = 2052;
+	int sector_buf[512];
+
+	zxdebug("zx,efuse, a. %d\n", __LINE__);
+
+	while((*preg_status & 0x7) != 0b11) {
+		*preg_cen = 1;                          // enable e-fuse IP core;
+		udelay(10);
+	}
+
+	zxdebug("zx,efuse, b. %d\n", __LINE__);
+
+	*preg_intunmask = 1;                        // enable e-fuse read data interrupt;
+	*preg_addr      = ((1024 / 8) | 07 << 9);   // send read address to e-fuse , that is 0xe80;
+	*preg_req       = 1;
+
+	zxdebug("zx,efuse, c. %d, int:%x\n", __LINE__, *preg_int);
+
+	unsigned int regint;
+	do {
+		regint = *preg_int;
+		udelay(100);
+
+		zxdebug("zx,efuse, c.1 %d, int:%x\n", __LINE__, regint);
+	}
+	while((regint & 1 << 18) == 0) ;          // wait interrupt.
+
+	zxdebug("zx,efuse, d.%d\n", __LINE__);
+
+	if (low)
+		*low = preg_data[0];
+	if (high)
+		*high = preg_data[1];
+
+	*preg_intmask  = 1;                         // clear e-fuse interrupt.
+
+	if((*low == 0) && (*high == 0)){
+		mmc_read(1,start_sector_no,sector_buf,1);
+		if(((char )sector_buf[0]) == 'S'){
+			*low = sector_buf[1];
+			*high = sector_buf[2];
+		}else{
+			sector_buf[0] = 'S';
+			zxdebug("READ_TIMER === %x\n",READ_TIMER);
+			sector_buf[1] = (random_serial(READ_TIMER) & 0xfffffff8 | 0x2);
+			sector_buf[2] = random_serial(READ_TIMER);
+			zxdebug("sector_buf[1] = %x\n",sector_buf[1]);
+			zxdebug("sector_buf[2] = %x\n",sector_buf[2]);
+			mmc_write(1,sector_buf,start_sector_no,1);
+			*low = sector_buf[1];
+			*high = sector_buf[2];
+		}
+		zxdebug("sector_buf[0] = %c\n",sector_buf[0]);
+	}
+	zxdebug("e-fuse data:%x, %x \n", *low, *high);
+}
 
 void get_board_serial(struct tag_serialnr *serialnr) {
-    // efuse register define.
-    volatile unsigned int* preg_status = 0x06160100;
-    volatile unsigned int* preg_cen = 0x06160104;
-    volatile unsigned int* preg_req = 0x0616010c;
-    volatile unsigned int* preg_addr = 0x06160108;
-    volatile unsigned int* preg_data = 0x06160110;
-    volatile unsigned int* preg_intmask = 0x06160128;
-    volatile unsigned int* preg_intunmask = 0x0616012C;
-    volatile unsigned int* preg_int  = 0x06160124;
-    
-    if ((*preg_status) & 07 != 0b11) {
-        *preg_cen    = 0;
-        *preg_cen   |= 1;
-    }
-
-    *preg_addr       = ((1024 / 8) | 07 << 9);
-    *preg_req       |= 1;
-    *preg_intmask   |= 1;
-    
-    while((*preg_int & 1) == 0) ;    // wait interrupt.
-
-    serialnr->low   = preg_data[0];
-    serialnr->high  = preg_data[1];
-
-    //serialnr->low = 0xc5b80012;
-    //serialnr->high = 0x000000c7;    
+	get_cpu_efuse_data(&serialnr->low, &serialnr->high);
 } 

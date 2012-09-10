@@ -213,6 +213,16 @@ int do_ns115(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	unsigned long unit;
 	unsigned int  nouse = 0;
 
+    	if (!strncmp(argv[1], "efuse", 5)) {
+        	printf("zx-efuse begin.\n");
+        	void get_cpu_efuse_data(unsigned int* low, unsigned int* high);
+
+        	unsigned int low, high;
+      	 	get_cpu_efuse_data(&low, &high);
+        	printf("ns115 serial : %x,%x \n",high, low);
+		return 0;
+    	}
+
 	/*PLL0*/
 	DEV_CLK_CONFIG1(pll0)
 	DEV_PWR_CONFIG(pll0)
@@ -449,5 +459,7 @@ U_BOOT_CMD(
 	"ns115 <dev> pwr down: power down device <dev>\n"
 	"ns115 <dev> clk set <rate> <unit>: set clock rate for device <dev>\n"
         "ns115 cpu dvfs <rate> <volt>: ns115 cpu dvfs test\n"
-        "ns115 dtflow: ns115 dataflow tests\n");
+        "ns115 dtflow: ns115 dataflow tests\n"
+        "ns115 efuse:  show ns115 serial number from efuse\n"
+    );
 #endif

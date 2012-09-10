@@ -427,6 +427,8 @@ void start_armboot (void)
 //	gd->fb_base = getenv("fbaddr");
 #endif /* CONFIG_VFD */
 
+	/* initialize environment */
+	env_relocate ();
 #ifdef CONFIG_LCD
 	/* board init may have inited fb_base */
 	if (!gd->fb_base) {
@@ -461,7 +463,7 @@ void start_armboot (void)
 #endif
 
 	/* initialize environment */
-	env_relocate ();
+//	env_relocate ();
 	
 	char disp_format[3];
 	char *str;
