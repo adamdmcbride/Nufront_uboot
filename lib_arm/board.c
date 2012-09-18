@@ -411,7 +411,10 @@ void start_armboot (void)
 	/* configure available FLASH banks */
 	display_flash_config (flash_init ());
 #endif /* CONFIG_SYS_NO_FLASH */
+
+#ifndef CONFIG_NS115_HDMI_STICK
 	power_key_delay();
+#endif
 
 #ifdef CONFIG_VFD
 #	ifndef PAGE_SIZE

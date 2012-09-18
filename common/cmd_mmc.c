@@ -31,25 +31,26 @@ static int curr_device = -1;
 
 int mem_cmp(unsigned int *src, unsigned int *dst, unsigned int count)
 {
-	ulong addr1 = src;
-	ulong addr2 = dst;
+	unsigned int addr1 = src;
+	unsigned int addr2 = dst;
 	unsigned int ngood = 0;
 	unsigned int size = 4;
-	while (count-- > 0) {
-		ulong word1 = *(ulong *)addr1;
-		ulong word2 = *(ulong *)addr2;
+    	unsigned int i = count;
+	while (i-- > 0) {
+		unsigned int word1 = *(unsigned int *)addr1;
+		unsigned int word2 = *(unsigned int *)addr2;
 		if (word1 != word2) {
 			printf("word at 0x%08lx (0x%08lx) "
 				"!= word at 0x%08lx (0x%08lx)\n",
 				addr1, word1, addr2, word2);
 				break;
 		}
-	ngood++; 
+	ngood++;
 	addr1 += size;
 	addr2 += size;
 	}
 
-	printf("Total of %ld were the same\n",ngood);
+	printf("Total %ld of %ld were the same.\n", ngood, count);
 	return 1;
 }
 
@@ -103,7 +104,7 @@ int do_mmc (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
                         cmd_usage(cmdtp);
                   	return 1;
                 }
-   
+
                 printf("mmc%d is current device\n", curr_device);
 
 
@@ -121,7 +122,7 @@ int do_mmc (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 			printf("\nMMC read: dev # %d, block # %d, count %d ...\n", dev, blknr, blkcnt);
 			mmc_read(dev, blknr, addr, blkcnt);
 		//	flush_cache((ulong)addr, cnt * 512);
-				
+
 	//		printf("%d blocks read: %s\n",n, (n==cnt) ? "OK" : "ERROR");
 	//		return (n == cnt) ? 0 : 1;
 		//		}
@@ -157,7 +158,7 @@ int do_mmc (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 #define RWTEST_SIZE		100	/* in MBytes */
 
 #define MMC_RWTEST_SIZE		(RWTEST_SIZE*1024*1024/512)
-#define MMC_END_SECTOR		(MMC_START_SECTOR + MMC_RWTEST_SIZE)	
+#define MMC_END_SECTOR		(MMC_START_SECTOR + MMC_RWTEST_SIZE)
 
 		/* mmc rwtest  0 0x80100000 5000 100 */
 		int dev = simple_strtoul(argv[2], NULL, 10);
@@ -182,11 +183,17 @@ int do_mmc (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 				  0x7778, 0x797a, 0x7b7c, 0x7d7e,
 				  0x7f80, 0x8182, 0x8384, 0x8586};
 		/* poison DDR area */
-		printf("Now poisoning DDR area\n");
+		printf("Now prepare source & destination ram area\n");
 		for(i = 0; i <= nr_sectors*512/4; i++) {
 			(*(((unsigned int *)addr) + i)) = pattern[i % 0x10];
 			if(!(i % 0x2000)/* 8KBytes*/)
 				printf("@");
+		}
+
+		for(i = 0; i <= nr_sectors*512/4; i++) {
+			(*(((unsigned int *)addr) + +nr_sectors*512/4 + i)) = ~ pattern[i % 0x10];
+			if(!(i % 0x2000)/* 8KBytes*/)
+				printf("#");
 		}
 
 		printf("\nStarting SD/MMC read/write test now\n");
@@ -196,11 +203,11 @@ int do_mmc (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	//	printf("\t total size	-- %d MBytes\n", size);
 
 		mmc_write(dev, addr, start_sect, nr_sectors);
-		mmc_read(dev, start_sect, addr+nr_sectors*512/32, nr_sectors);
+		mmc_read(dev, start_sect, (((unsigned int *)addr)+nr_sectors*512/4), nr_sectors);
 
 		printf("\nFinished SD/MMC read/write test\n");
 //		printf("please run command \n");
-		mem_cmp(addr,addr+(nr_sectors*512/32),nr_sectors*512/32);
+		mem_cmp(addr, (((unsigned int *)addr)+nr_sectors*512/4),nr_sectors*512/4);
 //		printf("\t\tcmp.l 0x%08x 0x%08x %x\n", addr, addr+(nr_sectors*512/32), nr_sectors*512/32);
 //		printf("to checkout the read/write test result\n");
 
@@ -219,7 +226,7 @@ U_BOOT_CMD(
 	"mmc write <device num> addr blk# cnt\n"
 	"mmc read <device num> addr blk# cnt\n"
 	"mmc erase <device num> start_addr size#\n"
-	"mmc rwtest <dev> addr start_blk# size\n");
+	"mmc rwtest <dev> addr start_blk# cnt\n");
 #else /* !CONFIG_GENERIC_MMC */
 
 static void print_mmcinfo(struct mmc *mmc)

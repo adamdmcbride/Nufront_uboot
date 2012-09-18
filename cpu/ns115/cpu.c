@@ -188,7 +188,7 @@ void update_freq()
 	do_ns115(NULL, 0, 6, ns115_gc);
 }
 
-#if 1
+#if 0
 #define zxdebug(fmt, args...)   printf(fmt, ##args)
 #else
 #define zxdebug(...)
