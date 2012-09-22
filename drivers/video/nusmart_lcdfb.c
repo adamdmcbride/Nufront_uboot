@@ -98,6 +98,24 @@ vidinfo_t panel_info = {
    {
    }
  */
+void lcd_disable(void)
+{
+	unsigned int value;
+
+	value = lcdc_readl(NUSMART_LCDC_BASE,NUSMART_LCDC_CTRL);
+	if((value & NUSMART_LCDC_ENABLE)){
+		value = value & (~NUSMART_LCDC_ENABLE);
+	}
+	lcdc_writel(NUSMART_LCDC_BASE, NUSMART_LCDC_CTRL, value);
+
+	value = lcdc_readl(NUSMART_LCDC2_BASE,NUSMART_LCDC_CTRL);
+	if((value & NUSMART_LCDC_ENABLE)){
+		value = value & (~NUSMART_LCDC_ENABLE);
+	}
+	lcdc_writel(NUSMART_LCDC2_BASE, NUSMART_LCDC_CTRL, value);
+
+}
+	
 void bpix_init(void)
 {
 	if(disp_flag == 0)
@@ -238,5 +256,9 @@ void lcd_newline(void * row_sec, int scroll_size)
 		value |= NUSMART_LCDC_PTRF;
 	}
 	//	lcdc_writel(panel_info.mmio, NUSMART_LCDC_CTRL, value);
+#if defined(CONFIG_NS115_HDMI_STICK)
+	lcd_disable();
+#else
 	lcd_enable();
+#endif
 }
