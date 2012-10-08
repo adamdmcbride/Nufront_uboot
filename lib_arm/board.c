@@ -63,6 +63,7 @@ DECLARE_GLOBAL_DATA_PTR;
 
 ulong monitor_flash_len;
 unsigned int disp_flag = 0;
+extern int  fastboot_flag;
 
 #ifdef CONFIG_HAS_DATAFLASH
 extern int  AT91F_DataflashInit(void);
@@ -72,8 +73,6 @@ extern void dataflash_print_info(void);
 #ifndef CONFIG_IDENT_STRING
 #define CONFIG_IDENT_STRING ""
 #endif
-
-extern int  fastboot_flag;
 
 const char version_string[] =
 	U_BOOT_VERSION" (" U_BOOT_DATE " - " U_BOOT_TIME ")"CONFIG_IDENT_STRING;
@@ -412,7 +411,7 @@ void start_armboot (void)
 	display_flash_config (flash_init ());
 #endif /* CONFIG_SYS_NO_FLASH */
 
-#ifndef CONFIG_NS115_HDMI_STICK
+#ifdef CONFIG_NS115_PAD_REF
 	power_key_delay();
 #endif
 
@@ -445,8 +444,15 @@ void start_armboot (void)
 		addr = (_bss_end + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1);
 		//addr = 0xF7000000;
 		lcd_setmem (addr);
-		unsigned int *a = getenv("fbaddr");
-		gd->fb_base = 0xb3800000;
+		char pmem_addr[20];
+		int i = 0;
+		i = getenv_r ("pmem_base", pmem_addr, sizeof(pmem_addr));
+//		unsigned int *a = getenv("fbaddr");
+		if(i > 0)
+			gd->fb_base = simple_strtoul (pmem_addr, NULL, 16);
+		else
+			gd->fb_base = 0xb3800000;
+//		gd->fb_base = 0xb3800000;
 //		gd->fb_base = addr;
 	}
 #endif /* CONFIG_LCD */

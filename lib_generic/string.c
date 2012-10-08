@@ -455,6 +455,26 @@ void * memcpy(void * dest,const void *src,size_t count)
 
 	return dest;
 }
+
+void* memcpy4(void* dest, const void* src, size_t count)                                                                      
+{
+    unsigned int *a = (unsigned int*)dest, *b = (unsigned int*)src;
+
+    while(count > 0) {
+        if (count < 4) {
+	    char* ca = (char*)a, *cb = (char*)b;
+            while(count--) {
+               *ca++ = *cb++;
+            }
+            break;
+        }
+        else {
+            *a++ = *b++;
+	    count -= 4;
+        }
+    }
+}
+
 #endif
 
 #ifndef __HAVE_ARCH_MEMMOVE

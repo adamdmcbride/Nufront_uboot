@@ -36,6 +36,8 @@
 # include <assert.h>
 # include <ctype.h>
 
+//#   define debug(fmt,args...)   printf(fmt ,##args)  
+#define DEBUG
 # ifndef debug
 #  ifdef DEBUG
 #   define debug(fmt,args...)	printf(fmt ,##args)
@@ -72,6 +74,60 @@ typedef struct _ENTRY {
 	int used;
 	ENTRY entry;
 } _ENTRY;
+
+
+
+/* This is a trivial atoi implementation since we don't have one available */
+int atoi(char *string)
+{
+	int length;
+	int retval = 0;
+	int i;
+	int sign = 1;
+
+	length = strlen(string);
+	for (i = 0; i < length; i++) {
+		if (0 == i && string[0] == '-') {
+			sign = -1; 
+			continue;
+		}   
+		if (string[i] > '9' || string[i] < '0') {
+			break;
+		}   
+		retval *= 10; 
+		retval += string[i] - '0';
+	}   
+	retval *= sign;
+	return retval;
+}
+
+static char * strim(char * str)
+{
+	char *p; 
+
+	if(!str)
+		return NULL;
+
+	p = str + strlen(str) - 1;
+	while(p >= str) {
+		if(*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') {
+			*p = 0;
+			p--;
+		} else {
+			break;
+		}   
+	}   
+
+	if (p == str)
+		return p;
+
+	p = str;
+	while(*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n')
+		p++;
+
+	return p;
+}
+
 
 
 /*
@@ -839,7 +895,8 @@ int hread_buf(struct hsearch_data *htab, const char *env, size_t size,const  cha
 int hread_buf_ptn(struct hsearch_data *htab, const char *env, size_t size,const  char sep,struct bootsel *bootsel)
 {
 	char *data,*sp, *dp,*name, *value,*ptr;
-	
+	int part_size = 0;
+
 	if( htab == NULL) {
 		printf("htab == NUL\n");
 		return 0;
@@ -894,62 +951,32 @@ int hread_buf_ptn(struct hsearch_data *htab, const char *env, size_t size,const 
 		}
 		*sp++ = '\0';
 		++dp;
-		if(strncmp(name,"mmcblk1p1", strlen("mmcblk1p1")) == 0){
-			bootsel->sdcardstart = (char *)value;
-			ptr = strchr(value,'-');
-			strncpy(bootsel->sdcardstart,value,ptr-value);
-			*(bootsel->sdcardstart + (char)(ptr-value)) = '\0';
-			debug("bootsel->sdcardstart = %s\n",bootsel->sdcardstart);
+
+		value = strim(value);
+		part_size = atoi(value);
+		if(strncmp(name,"boot", strlen("boot")) == 0){
+			bootsel->bootsize = part_size;
+			debug("bootsel->bootsize = %d\n",bootsel->bootsize);
 		}
-		if(strncmp(name,"mmcblk1p2", strlen("mmcblk1p2")) == 0){
-			bootsel->bootstart = (char *)value;
-			ptr = strchr((char *)value,'-');
-			strncpy(bootsel->bootstart,value,(ptr-value));
-			*(bootsel->bootstart + (char)(ptr-value)) = '\0';
-			debug("bootsel->bootstart = %s\n",bootsel->bootstart);
+		if(strncmp(name,"system", strlen("system")) == 0){
+			bootsel->systemsize = part_size;
+			debug("bootsel->systemsize = %d\n",bootsel->systemsize);
 		}
-		if(strncmp(name,"mmcblk1p3", strlen("mmcblk1p3")) == 0){
-			bootsel->systemstart = (char *)value;
-			ptr = strchr(value,'-');
-			strncpy(bootsel->systemstart,value,ptr-value);
-			*(bootsel->systemstart + (char)(ptr - value)) = '\0';
-			debug("bootsel->systemstart = %s\n",bootsel->systemstart);
+		if(strncmp(name,"data", strlen("data")) == 0){
+			bootsel->datasize = part_size;		
+			debug("bootsel->datasize = %d\n",bootsel->datasize);
 		}
-		if(strncmp(name,"mmcblk1p4",strlen("mmcblk1p4")) == 0) {
-			bootsel->extendstart = (char *)value;		
-			ptr = strchr(value,'-');
-			strncpy(bootsel->extendstart,value,ptr-value);
-			*(bootsel->extendstart + (char)(ptr - value)) = '\0';
-			debug("bootsel->extendstart = %s\n",bootsel->extendstart);
+		if(strncmp(name,"cache",strlen("cache")) == 0) {
+			bootsel->cachesize = part_size;		
+			debug("bootsel->cachesize = %d\n",bootsel->cachesize);
 		}
-		if(strncmp(name,"mmcblk1p5",strlen("mmcblk1p5")) == 0) {
-			bootsel->datastart = (char *)value;		
-			ptr = strchr(value,'-');
-			strncpy(bootsel->datastart,value,ptr - value);
-			*(bootsel->datastart + (char)(ptr - value)) = '\0';
-			debug("bootsel->datastart = %s\n",bootsel->datastart);
+		if(strncmp(name,"misc",strlen("misc")) == 0) {
+			bootsel->miscsize = part_size;		
+			debug("bootsel->miscsize = %d\n",bootsel->miscsize);
 		}
-		if(strncmp(name,"mmcblk1p6",strlen("mmcblk1p6")) == 0) {
-			bootsel->cachestart = (char *)value;		
-			ptr = strchr(value,'-');
-			strncpy(bootsel->cachestart,value,ptr - value);
-			*(bootsel->cachestart + (char)(ptr - value)) = '\0';
-			debug("bootsel->cachestart = %s\n",bootsel->cachestart);
-		}
-		if(strncmp(name,"mmcblk1p7",strlen("mmcblk1p7")) == 0) {
-			bootsel->miscstart = (char *)value;		
-			ptr = strchr(value,'-');
-			strncpy(bootsel->miscstart,value,ptr - value);
-			*(bootsel->miscstart + (char)(ptr - value)) = '\0';
-			debug("bootsel->miscstart = %s\n",bootsel->miscstart);
-		}
-		if(strncmp(name,"mmcblk1p8",strlen("mmcblk1p8")) == 0) {
-		//	bootsel->recoverystart = (char *)value;		
-			bootsel->recoverystart = malloc(10);		
-			ptr = strchr(value,'-');
-			strncpy(bootsel->recoverystart,value,ptr - value);
-			*(bootsel->recoverystart + (char)(ptr - value)) = '\0';
-			debug("bootsel->recoverystart = %s\n",bootsel->recoverystart);
+		if(strncmp(name,"recovery",strlen("recovery")) == 0) {
+			bootsel->recoverysize = part_size;		
+			debug("bootsel->recoverysize = %d\n",bootsel->recoverysize);
 		}
 	} while ((dp <data + size) && *dp);
 			

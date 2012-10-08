@@ -137,7 +137,7 @@ int do_mmc (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 			void *addr = (void *)simple_strtoul (argv[3],NULL,16);
 			u32 blkcnt = simple_strtoul(argv[5],NULL,10);
 			u32 blknr = simple_strtoul(argv[4],NULL,10);
-			printf("\nMMC write: dev # %d, block # %d, count %d ...\n", dev, blknr, blkcnt);
+//			printf("\nMMC write: dev # %d, block # %d, count %d ...\n", dev, blknr, blkcnt);
 			mmc_write( dev, addr, blknr, blkcnt);
 	//		printf("%d blocks written: %s\n",n, (n == cnt) ? "OK" : "ERROR");
 	//		return (n == cnt)? 0 : 1;

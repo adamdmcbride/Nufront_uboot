@@ -8,6 +8,7 @@ static ulong lastdec;
 
 #define READ_TIMER (*(volatile ulong *)(CONFIG_SYS_TIMERBASE+4))
 
+unsigned int fastboot_flag = 0;
 
 static void flash__init (void);
 static void rvpb_timer_init(void);

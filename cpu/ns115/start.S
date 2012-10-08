@@ -53,9 +53,10 @@ _start:
 	ldr	pc, _irq
 	ldr	pc, _fiq
 
+.balign 512
 .global _nufront_serial_no
 _nufront_serial_no:
-    .fill 2, 128, 0
+    .fill 128, 2, 0
 
 _undefined_instruction:
 	.word undefined_instruction

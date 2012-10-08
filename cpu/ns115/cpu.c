@@ -194,7 +194,6 @@ void update_freq()
 #define zxdebug(...)
 #endif
 
-
 #define RANDOM_MAX 0x7FFFFFFF
 static unsigned int next = 1;
 

@@ -106,14 +106,12 @@ struct bootsel {
 	char *data;
 	char *cache;
 	char *device;
-	char *sdcardstart;
-	char *bootstart;
-	char *systemstart;
-	char *extendstart;
-	char *datastart;
-	char *cachestart;
-	char *miscstart;
-	char *recoverystart;
+	unsigned int bootsize;
+	unsigned int systemsize;
+	unsigned int datasize;
+	unsigned int cachesize;
+	unsigned int miscsize;
+	unsigned int recoverysize;
 };
 
 /* Flags for himport_r() */

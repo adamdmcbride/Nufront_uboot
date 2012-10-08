@@ -115,6 +115,7 @@ typedef struct {
 	unsigned int mode;
 	unsigned int size;
 	unsigned int RCA;
+	unsigned int CID[4];    /* LSB first */
 
 	unsigned int cmd;
 	unsigned int response[4];

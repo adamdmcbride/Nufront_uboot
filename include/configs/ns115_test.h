@@ -34,16 +34,8 @@
  *  Code, etc. common to all ARM supplied development boards
  */
 
-//#define CONFIG_PBX
-
-#ifdef CONFIG_PBX
-#define CONFIG_SYS_TIMERBASE            0xC5100000      /* Timer 0 and 1 base   */
-#define CONFIG_SYS_NS16550_COM1         0xC5150000 
-#define CONFIG_LOGICTILE 1
-#else
 #define CONFIG_SYS_TIMERBASE  		0x06150000 
 #define CONFIG_SYS_NS16550_COM1		0x06090000
-#endif
 
 
 #define CONFIG_NS115_TEST
@@ -107,7 +99,8 @@
 #define CONFIG_CMD_SAVEENV
 #define CONFIG_NET_MULTI
 #define CONFIG_CMD_RUN
-#define CONFIG_CMD_EXT2
+//#define CONFIG_CMD_EXT2
+#define CONFIG_CMD_EXT4
 #define CONFIG_CMD_LOADB
 #define CONFIG_CMD_BRINGUP
 #define CONFIG_CMD_SOURCE      1
@@ -161,6 +154,55 @@
 #define CONFIG_SYS_BARGSIZE	CONFIG_SYS_CBSIZE	/* Boot Argument Buffer Size		*/
 #undef	CONFIG_SYS_CLKS_IN_HZ		/* everything, incl board info, in Hz */
 #define CONFIG_SYS_LOAD_ADDR	0x80007fc0	/* default load address */
+
+
+#define CONFIG_EXTRA_ENV_SETTINGS       \
+	"dispformat=16\0"       \
+	"pmem_base=0xb3800000\0" \
+        "splashimage=0x80007fc0\0"      \
+        "bootcmd=run default_bootargs;ext4load mmc 1:2 0x80007fc0 uImage;ns115 cpu volt 1130000;bootm\0"       \
+        "default_bootargs=setenv bootargs console=ttyS0,115200 pmem=${pmem_base} root=/dev/mmcblk1p2 rw rootwait mem=824M video=nusmartfb:1024x600-${dispformat} init=/init\0" \
+        "mmcupdate=fatload mmc 0:1 0x80007fc0 mmc_update;autoscr 0x80007fc0\0"  \
+        "usbupdate=fatload usb 0:1 0x80007fc0 usb_update;autoscr 0x80007fc0\0"  \
+        "splashpos=m,m         \0"   
+
+/*
+#define CONFIG_EXTRA_ENV_SETTINGS 								 \
+	"dispformat=16\0"									 \
+	"splashimage=0x80007fc0\0"								 \
+	"loadbootscript=fatload mmc 0:1 0x80007fc0 boot.scr\0" 					 \
+	"bootscript=echo Running bootscript from TF card ...; " 				 \
+		"source 0x80007fc0\0" 								 \
+	"tfload=fatload mmc 0:1 0x80007fc0 uImage;bootm \0" 					 \
+	"emmcload=mmc init 1;ext4load mmc 1:2 0x80007fc0 uImage;bootm\0" 			 \
+	"tfargs=" 										 \
+		"setenv bootargs console=ttyS0,115200 " 					 \
+		"video=nusmartfb:1024x600-${dispformat} " 					 \
+		"root=/dev/mmcblk0p2 " 								 \
+		"ro rootwait mem=776M init=\init;bootm \0" 					 \
+	"emmcargs=" 										 \
+		"setenv bootargs console=ttyS0,115200 " 					 \
+		"video=nusmartfb:1024x600-${dispformat} " 					 \
+		"root=/dev/mmcblk1p2 " 								 \
+		"ro rootwait mem=776M init=\init;bootm \0" 					 \
+	"tfboot=echo Load uImage from TF card ...; " 						 \
+		"run tfargs\0" 									 \
+	"emmcboot=echo Booting from emmc ...; " 						 \
+		"run emmcargs; " 								 \
+		"run emmcload \0"								 \
+	"mmcupdate=mmc init 0;fatload mmc 0:1 0x80007fc0 mmc_update;autoscr 0x80007fc0\0"	 \
+	"usbupdate=usb init;fatload usb 0:1 0x80007fc0 usb_update;autoscr 0x80007fc0\0"		 \
+	"autoboot= "										 \
+		  "mmc init 0;"    								 \
+		  "if test $? -ne 0; then " 							 \
+		  	"fatload mmc 0:1 0x80007fc0 uImage;" 					 \
+		  	"if test $? -eq 0;then "   						 \
+				"run tfboot; " 							 \
+		  	"else; run emmcboot; fi;" 						 \
+		  "else;run emmcboot;fi;\0"  							 \
+	"splashpos=m,m	       \0"		
+*/
+//#define CONFIG_BOOTCOMMAND "run autoboot"
 
 /*-----------------------------------------------------------------------
  * Stack sizes
