@@ -25,9 +25,9 @@ void show_boot_progress(int progress)
 
 #define COMP_MODE_ENABLE ((unsigned int)0x0000EAEF)
 
-static char bootargs_recovery[] = "set bootargs root=/dev/mmcblk1p8 rw rootwait mem=776M video=nusmartfb1:1280x720-${dispformat} console=ttyS0,115200 init=/init";
+static char bootargs_recovery[] = "set bootargs root=/dev/mmcblk1p8 rw rootwait mem=776M console=ttyS0,115200 init=/init";
 static char bootcmd_recovery[] = "run default_bootargs;ext4load mmc 1:8 0x80007fc0 uImage_recovery;bootm";
-static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS0,115200 video=nusmartfb1:1280x720-${dispformat} init=/init androidboot.mode=charger";
+static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS0,115200 init=/init androidboot.mode=charger";
 
 #define NUFRONT_LCD1_BASE 0xB4800000
 static unsigned int recovery_flag = 0;
