@@ -3098,6 +3098,9 @@ realview_pb11mp_config	:	unconfig
 ns115_test_config: unconfig
 	@$(MKCONFIG) $(@:_config=) arm ns115 ns115_test  nufront
 
+ns115_pad_prototype_config: unconfig
+	@$(MKCONFIG) $(@:_config=) arm ns115 ns115_pad_prototype  nufront
+
 ns115_pad_ref_config: unconfig
 	@$(MKCONFIG) $(@:_config=) arm ns115 ns115_pad_ref  nufront
 

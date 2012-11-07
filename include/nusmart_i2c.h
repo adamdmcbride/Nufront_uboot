@@ -123,7 +123,7 @@
 #define NS115_I2C0_BASE     0x06100000
 #define NS115_I2C1_BASE     0x06110000
 #define NS115_I2C2_BASE     0x06120000
-#define NS115_I2C3_BASE     0x0613000
+#define NS115_I2C3_BASE     0x06130000
 
 
 /* EC register address */

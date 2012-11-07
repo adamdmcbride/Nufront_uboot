@@ -377,6 +377,12 @@ int ns2815_pll_get_param(unsigned long rate, unsigned int * pll_nr, unsigned int
         *pll_od = PRCM_PLL_OD_56MHZ;
         *pll_nb = PRCM_PLL_NB_56MHZ;
         break;
+    case 58464000: /* 800*480*/
+        *pll_nr = PRCM_PLL_NR_58M464HZ;
+        *pll_nf = PRCM_PLL_NF_58M464HZ;
+        *pll_od = PRCM_PLL_OD_58M464HZ;
+        *pll_nb = PRCM_PLL_NB_58M464HZ;
+        break;
     case 80000000: /* 800*600*/
         *pll_nr = PRCM_PLL_NR_80MHZ;
         *pll_nf = PRCM_PLL_NF_80MHZ;
@@ -394,6 +400,12 @@ int ns2815_pll_get_param(unsigned long rate, unsigned int * pll_nr, unsigned int
         *pll_nf = PRCM_PLL_NF_100M8HZ;
         *pll_od = PRCM_PLL_OD_100M8HZ;
         *pll_nb = PRCM_PLL_NB_100M8HZ;
+        break;
+     case 102400000:/*1024*600*/
+        *pll_nr = PRCM_PLL_NR_102M4HZ;
+        *pll_nf = PRCM_PLL_NF_102M4HZ;
+        *pll_od = PRCM_PLL_OD_102M4HZ;
+        *pll_nb = PRCM_PLL_NB_102M4HZ;
         break;
     case 130000000: /* 1024*768*/
         *pll_nr = PRCM_PLL_NR_130MHZ;

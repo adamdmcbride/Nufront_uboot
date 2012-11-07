@@ -1252,7 +1252,13 @@ static void init_serial_no() {
 }
 
 int do_fastboot (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
-{	
+{
+#ifdef CONFIG_NS115_PAD_PROTOTYPE
+#define GPIO_USB_SWITCH (32+5)
+       gpio_pinmux_config(GPIO_USB_SWITCH);
+       nufront_set_gpio_value(GPIO_USB_SWITCH,0);      /* 0: select usb slave */
+#endif
+
 	init_fastboot(&fastbootArgs);
 
 	int partitionsize = 0;
@@ -1330,7 +1336,9 @@ int do_fastboot (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 #endif
 		}
 	}
-
+#ifdef CONFIG_NS115_PAD_PROTOTYPE
+	nufront_set_gpio_value(GPIO_USB_SWITCH,1);      /* 1: select usb host */
+#endif
 	return 0;
 }
 

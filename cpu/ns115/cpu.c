@@ -189,9 +189,9 @@ void update_freq()
 }
 
 #if 0
-#define zxdebug(fmt, args...)   printf(fmt, ##args)
+#define efuse_debug(fmt, args...)   printf(fmt, ##args)
 #else
-#define zxdebug(...)
+#define efuse_debug(...)
 #endif
 
 #define RANDOM_MAX 0x7FFFFFFF
@@ -234,34 +234,35 @@ void get_cpu_efuse_data(unsigned int* low, unsigned int* high) {
 	volatile unsigned int* preg_intunmask = 0x0616012C;
 	volatile unsigned int* preg_int       = 0x05041d0c;
 
+
 	unsigned int start_sector_no = 2052;
 	int sector_buf[512];
 
-	zxdebug("zx,efuse, a. %d\n", __LINE__);
+	efuse_debug("ns115-efuse, a. %d\n", __LINE__);
 
 	while((*preg_status & 0x7) != 0b11) {
 		*preg_cen = 1;                          // enable e-fuse IP core;
 		udelay(10);
 	}
 
-	zxdebug("zx,efuse, b. %d\n", __LINE__);
+	efuse_debug("ns115-efuse, b. %d\n", __LINE__);
 
 	*preg_intunmask = 1;                        // enable e-fuse read data interrupt;
 	*preg_addr      = ((1024 / 8) | 07 << 9);   // send read address to e-fuse , that is 0xe80;
 	*preg_req       = 1;
 
-	zxdebug("zx,efuse, c. %d, int:%x\n", __LINE__, *preg_int);
+	efuse_debug("ns115-efuse, c. %d, int:%x\n", __LINE__, *preg_int);
 
 	unsigned int regint;
 	do {
 		regint = *preg_int;
 		udelay(100);
 
-		zxdebug("zx,efuse, c.1 %d, int:%x\n", __LINE__, regint);
+		efuse_debug("ns115-efuse, c.1 %d, int:%x\n", __LINE__, regint);
 	}
 	while((regint & 1 << 18) == 0) ;          // wait interrupt.
 
-	zxdebug("zx,efuse, d.%d\n", __LINE__);
+	efuse_debug("ns115-efuse, d.%d\n", __LINE__);
 
 	if (low)
 		*low = preg_data[0];
@@ -270,6 +271,24 @@ void get_cpu_efuse_data(unsigned int* low, unsigned int* high) {
 
 	*preg_intmask  = 1;                         // clear e-fuse interrupt.
 
+
+	if ((0 == *low) && (0 == *high)) {
+		// must read data from 1088;
+		const int dataoffset = 1088;
+		*preg_addr = (dataoffset / 8) | (07 << 9);
+		*preg_req  = 1;
+		do {
+			regint = *preg_int;
+			udelay(100);
+			efuse_debug("ns115-efuse, c.2 %d, int:%x\n", __LINE__, regint);
+		} while( (regint & (1 << 18)) == 0 );
+		if (low)
+			*low = preg_data[0];
+		if (high)
+			*high = preg_data[1];
+		*preg_intmask = 1;
+	}
+
 	if((*low == 0) && (*high == 0)){
 		mmc_read(1,start_sector_no,sector_buf,1);
 		if(((char )sector_buf[0]) == 'S'){
@@ -277,18 +296,18 @@ void get_cpu_efuse_data(unsigned int* low, unsigned int* high) {
 			*high = sector_buf[2];
 		}else{
 			sector_buf[0] = 'S';
-			zxdebug("READ_TIMER === %x\n",READ_TIMER);
+			efuse_debug("READ_TIMER === %x\n",READ_TIMER);
 			sector_buf[1] = (random_serial(READ_TIMER) & 0xfffffff8 | 0x2);
 			sector_buf[2] = random_serial(READ_TIMER);
-			zxdebug("sector_buf[1] = %x\n",sector_buf[1]);
-			zxdebug("sector_buf[2] = %x\n",sector_buf[2]);
+			efuse_debug("sector_buf[1] = %x\n",sector_buf[1]);
+			efuse_debug("sector_buf[2] = %x\n",sector_buf[2]);
 			mmc_write(1,sector_buf,start_sector_no,1);
 			*low = sector_buf[1];
 			*high = sector_buf[2];
 		}
-		zxdebug("sector_buf[0] = %c\n",sector_buf[0]);
+		efuse_debug("sector_buf[0] = %c\n",sector_buf[0]);
 	}
-	zxdebug("e-fuse data:%x, %x \n", *low, *high);
+	efuse_debug("e-fuse data:%x, %x \n", *low, *high);
 }
 
 void get_board_serial(struct tag_serialnr *serialnr) {

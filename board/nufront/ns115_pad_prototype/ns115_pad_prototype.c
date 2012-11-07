@@ -25,9 +25,11 @@ void show_boot_progress(int progress)
 
 #define COMP_MODE_ENABLE ((unsigned int)0x0000EAEF)
 
-static char bootargs_recovery[] = "set bootargs root=/dev/mmcblk1p8 rw rootwait mem=776M console=ttyS0,115200 init=/init video=nusmartfb:1024x600-${dispformat}";
+static char bootargs_recovery[] = "set bootargs root=/dev/mmcblk1p8 rw rootwait mem=776M console=tt    yS0,115200 init=/init video=nusmartfb:${resolution}-${dispformat}";
+
 static char bootcmd_recovery[] = "run default_bootargs;ext4load mmc 1:8 0x80007fc0 uImage_recovery;bootm";
-static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS0,115200 init=/init video=nusmartfb:1024x600-${dispformat} androidboot.mode=charger";
+
+static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS    0,115200 init=/init video=nusmartfb:${resolution}-${dispformat} androidboot.mode=charger";
 
 #define NUFRONT_LCD1_BASE 0xB4800000
 static unsigned int recovery_flag = 0;
@@ -76,8 +78,13 @@ int board_init (void)
 	gpio_pinmux_config(86);         //CAM_PWR_EN;gpioc22
 	nufront_set_gpio_value(86,1);
 
+	gpio_pinmux_config(37);		//config USB_SWITCH output high,PB5
+	nufront_set_gpio_value(37,1);
+	
+	gpio_pinmux_config(48);         //VDD_5V_EN;gpiob16
+	nufront_set_gpio_value(48,1);
 
-	gpio_pinmux_config(85);         //VDD_5V_EN;gpioc21
+	gpio_pinmux_config(85);         //USB_5V_EN;gpioc21
 	nufront_set_gpio_value(85,1);
 
 #ifdef CONFIG_FASTBOOT_RECOVERY

@@ -792,11 +792,21 @@
 #define PRCM_PLL_NF_56MHZ                                          224
 #define PRCM_PLL_OD_56MHZ                                          16   
 #define PRCM_PLL_NB_56MHZ                                          112
+//29.232MHz*2
+#define PRCM_PLL_NR_58M464HZ                                       25
+#define PRCM_PLL_NF_58M464HZ                                       1218
+#define PRCM_PLL_OD_58M464HZ                                       10   
+#define PRCM_PLL_NB_58M464HZ                                       609
 //40.000MHz*2
 #define PRCM_PLL_NR_80MHZ                                          3
 #define PRCM_PLL_NF_80MHZ                                          329
 #define PRCM_PLL_OD_80MHZ                                          16
 #define PRCM_PLL_NB_80MHZ                                          160
+//51.2MHz*2
+#define PRCM_PLL_NR_102M4HZ                                        15
+#define PRCM_PLL_NF_102M4HZ                                        1792
+#define PRCM_PLL_OD_102M4HZ                                        14
+#define PRCM_PLL_NB_102M4HZ                                        896
 //65.000MHz*2
 #define PRCM_PLL_NR_130MHZ                                         1
 #define PRCM_PLL_NF_130MHZ                                         65

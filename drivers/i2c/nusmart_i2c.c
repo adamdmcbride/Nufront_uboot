@@ -463,4 +463,112 @@ int io373x_smbus_write_reg(void* i2c0_base,unsigned char slv_addr, unsigned shor
         return ret;
 }
 
+static unsigned int i2c_bus_num __attribute__ ((section (".data"))) = 0;
+static unsigned int i2c_bus_reg_bases[] = {
+    NS115_I2C0_BASE,
+    NS115_I2C1_BASE,
+    NS115_I2C2_BASE,
+    NS115_I2C3_BASE,
+};
+
+#if defined(CONFIG_I2C_MULTI_BUS)
+/*
+ * Functions for multiple I2C bus handling
+ */
+unsigned int i2c_get_bus_num(void)
+{
+       return i2c_bus_num;
+}
+
+int i2c_set_bus_num(unsigned int bus)
+{
+
+       if (bus >= CONFIG_SYS_MAX_I2C_BUS)
+               return -1;
+       i2c_bus_num = bus;
+       return 0;
+}
+#endif
+
+int i2c_init(int speed, int slaveadd)
+{
+    return 0;
+}
+int i2c_probe(uchar chip)
+{
+    unsigned char rbuf[4];
+    int *i2c_base = i2c_bus_reg_bases[i2c_bus_num];
+    int ret = 0;
+
+    dw_i2c_master_init(i2c_base, chip);
+
+    ret = dw_i2c_smbus_read(i2c_base, NULL, 0, rbuf, 1);
+
+    return ret;
+}
+
+int i2c_read(uchar chip, uint addr, int alen, uchar * buffer, int len)
+{
+    unsigned char wbuf[4];
+    int *i2c_base = i2c_bus_reg_bases[i2c_bus_num];
+    int ret = 0;
+    int i,j;
+
+    debug("i2c_read(chip 0x%x, addr 0x%x, alen %d, len %d,, buffer[0] 0x%02x\n",
+        chip, addr, alen, len, buffer[0]);
+
+    if(alen>2){
+        printf("addr too long\n");
+        return -1;
+    }
+    dw_i2c_master_init(i2c_base, chip);
+
+    // address phase
+    i = 0;
+    while(i < alen)
+    {
+        wbuf[alen-i-1] = (addr >> (8*i)) & 0xff;
+        i++;
+    }
+
+    ret = dw_i2c_smbus_read(i2c_base, wbuf, 1, buffer, len);
+
+    return ret;
+}
+
+int i2c_write(uchar chip, uint addr, int alen, uchar * buffer, int len)
+{
+    unsigned char wbuf[64];
+    int *i2c_base = i2c_bus_reg_bases[i2c_bus_num];
+    int ret = 0;
+    int i,j;
+
+    debug("i2c_write(chip 0x%x, addr 0x%x, alen %d, len %d,, buffer[0] 0x%02x\n",
+        chip, addr, alen, len, buffer[0]);
+    if(alen>2){
+        printf("addr too long\n");
+        return -1;
+    }
+    // address phase
+    i = 0;
+    while(i < alen)
+    {
+        wbuf[alen-i-1] = (addr >> (8*i)) & 0xff;
+        i++;
+    }
+    // data phase
+    j=0;
+    while(j < len)
+    {
+        wbuf[i+j] = buffer[j];
+        j++;
+    }
+
+    dw_i2c_master_init(i2c_base, chip);
+    ret = dw_i2c_send_bytes(i2c_base, wbuf, alen+len);
+
+    return ret;
+}
+
+
 

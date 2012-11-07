@@ -49,18 +49,34 @@ short console_row;
 #define NUSMART_LCDC_RGB565	(0x1 << 6)
 #define NUSMART_LCDC_RGB888	(0x2 << 6)
 
+//prototype board
+#if defined(CONFIG_LCD_800_480_60)
+       vidinfo_t panel_info = {        
+               vl_col:         800,
+               vl_row:         480,
+               vl_bpix:        5,
+               vl_hsync_len:   48,
+               vl_left_margin: 40,
+               vl_right_margin:40,
+               vl_vsync_len:   3,
+               vl_upper_margin:13,
+               vl_lower_margin:29,
+               mmio:           NUSMART_LCDC_BASE,
+       };
+#endif
+
 
 #if defined(CONFIG_LCD_1024_600_60)
 vidinfo_t panel_info = {    //NULL, 60, 1024, 600, 19841, 240, 48, 12, 3, 32, 10        0, FB_VMODE_NONINTERLACED
 	vl_col:		1024,
 	vl_row:		600,
 	vl_bpix:	5,
-	vl_hsync_len:	32,
-	vl_left_margin:	240,
-	vl_right_margin:48,
-	vl_vsync_len:	10,
-	vl_upper_margin:8,
-	vl_lower_margin:3,
+	vl_hsync_len:	20,
+	vl_left_margin:	160,
+	vl_right_margin:140,
+	vl_vsync_len:	3,
+	vl_upper_margin:12,
+	vl_lower_margin:20,
 	mmio:		NUSMART_LCDC_BASE,
 };
 #endif
@@ -126,14 +142,21 @@ void bpix_init(void)
 
 void lcd_ctrl_init(void *lcdbase)
 {
-	unsigned long value;
+	unsigned long value,burst_len;
 
 	debug("entering lcd_ctrl_init");
 
 #if defined(CONFIG_LCD_1024_600_60)
-	ns2815_pxl0_clk_set_rate(50400000,1);	
+//	ns2815_pxl0_clk_set_rate(50400000,1);	
+	ns2815_pxl0_clk_set_rate(51200000,1);
 //	ns2815_pxl0_clk_set_rate(43750000,0);	
 #endif
+
+#if defined(CONFIG_LCD_800_480_60)
+        ns2815_pxl0_clk_set_rate(29232000,1);   
+//      ns2815_pxl0_clk_set_rate(43750000,0);   
+#endif
+
 
 	bpix_init();
 	lcd_line_length = (panel_info.vl_col * NBITS (panel_info.vl_bpix)) / 8;
@@ -169,14 +192,12 @@ void lcd_ctrl_init(void *lcdbase)
 	}else{
 		value |= NUSMART_BURST_LENGTH;
 	}
-	lcdc_writel(panel_info.mmio, NUSMART_LCDC_AXI, value);
 
-	value = lcdc_readl(NUSMART_LCDC_BASE,NUSMART_LCDC_TRAN_NUM);	//set transfer num
-	if(panel_info.vl_bpix <= 4){
-		value = 0x257f;
-	}else{
-		value = 0x4aff;
-	}
+	burst_len = ((value >> 8) & 0xF) + 1;
+
+	lcdc_writel(panel_info.mmio, NUSMART_LCDC_AXI, value);
+	value =  (panel_info.vl_col * panel_info.vl_row / ((panel_info.vl_bpix > 4 ? 4: 8) * burst_len)) - 1;
+
 	lcdc_writel(panel_info.mmio, NUSMART_LCDC_TRAN_NUM, value);
 
 	debug("exiting lcd_ctrl_init");
@@ -204,7 +225,7 @@ void lcd_enable(void)
 	gpio_pinmux_config(4);	//lcd pannel on;gpioa4
 	nufront_set_gpio_value(4,1);
 
-
+#ifndef CONFIG_NS115_PAD_PROTOTYPE
 	gpio_pinmux_config(4);	//lcd pannel on;gpioa4
 	nufront_set_gpio_value(4,1);
 	udelay(20000);
@@ -218,6 +239,26 @@ void lcd_enable(void)
 	udelay(30000);
 	gpio_pinmux_config(5);          //enable LCD_BL_ON;gpio5
 	nufront_set_gpio_value(5,1);
+#else 
+	                      //prototype board
+	gpio_pinmux_config(4);  //lcd normal mode;gpioa4
+	nufront_set_gpio_value(4,1);
+	udelay(20000);
+
+  	gpio_pinmux_config(2);  //lcd vdd on;gpioa2
+	nufront_set_gpio_value(2,1);
+	udelay(20000);
+	       
+	gpio_pinmux_config(1);  //lcd bias on;gpioa1
+	nufront_set_gpio_value(1,1);
+	udelay(20000);
+	
+	//set pwm
+	writel(0x00028428, 0x06160000);
+	udelay(30000);
+	gpio_pinmux_config(5);          //enable LCD_BL_ON;gpio5
+	nufront_set_gpio_value(5,1);
+#endif
 }
 
 void lcd_newline(void * row_sec, int scroll_size)
