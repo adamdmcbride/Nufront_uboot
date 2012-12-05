@@ -613,6 +613,8 @@ unsigned char configure_mmc(mmc_card_data *mmc_card_cur,mmc_controller_data *mmc
 
 
 	ret_val = sdmmc_init_setup(mmc_contr_cur);
+
+	udelay(1000 * 10);
 	if (ret_val != 1)
 	{
 		printf("sdmmc_init_setup() failed. ret %d\n", ret_val);
@@ -705,7 +707,8 @@ unsigned char configure_mmc(mmc_card_data *mmc_card_cur,mmc_controller_data *mmc
 	//attention: for MMC card ,the highest frequency is 20MHz
 	//           for SD card, the highest frequency is 25MHz
 
-	unsigned int frequency = 25000;
+//	unsigned int frequency = 25000;
+	unsigned int frequency = 12500;
 	ret_val = SDIOHost_SetSDCLK(mmc_contr_cur,&frequency);
 	if (ret_val != 1)
 		return ret_val;
