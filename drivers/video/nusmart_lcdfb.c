@@ -95,6 +95,7 @@ vidinfo_t panel_info = {
 	mmio:		NUSMART_LCDC_BASE,
 };
 #endif
+
 #if defined(CONFIG_LCD_640_480_60)
 vidinfo_t panel_info = {
 	vl_col:		640,
@@ -109,6 +110,28 @@ vidinfo_t panel_info = {
 	mmio:		NUSMART_LCDC_BASE,
 };
 #endif
+
+#if defined(CONFIG_LCD_1280_720_60)
+vidinfo_t panel_info = {
+	vl_col:		1280,
+	vl_row:		720,
+	vl_bpix:	4,
+//	vl_hsync_len:	136,
+	vl_hsync_len:	40,
+//	vl_left_margin:	192,
+	vl_left_margin:	110,
+//	vl_right_margin:64,
+	vl_right_margin:220,
+//	vl_vsync_len:	3,
+	vl_vsync_len:	5,
+//	vl_upper_margin:22,
+	vl_upper_margin:5,
+//	vl_lower_margin:1,
+	vl_lower_margin:20,
+	mmio:		NUSMART_LCDC2_BASE,
+};
+#endif
+
 /*
    void lcd_setcolreg(ushort regno, ushort red, ushort green, ushort blue)
    {
@@ -118,17 +141,17 @@ void lcd_disable(void)
 {
 	unsigned int value;
 
-	value = lcdc_readl(NUSMART_LCDC_BASE,NUSMART_LCDC_CTRL);
+	value = lcdc_readl(panel_info.mmio,NUSMART_LCDC_CTRL);
 	if((value & NUSMART_LCDC_ENABLE)){
 		value = value & (~NUSMART_LCDC_ENABLE);
 	}
-	lcdc_writel(NUSMART_LCDC_BASE, NUSMART_LCDC_CTRL, value);
+	lcdc_writel(panel_info.mmio, NUSMART_LCDC_CTRL, value);
 
-	value = lcdc_readl(NUSMART_LCDC2_BASE,NUSMART_LCDC_CTRL);
+	value = lcdc_readl(panel_info.mmio,NUSMART_LCDC_CTRL);
 	if((value & NUSMART_LCDC_ENABLE)){
 		value = value & (~NUSMART_LCDC_ENABLE);
 	}
-	lcdc_writel(NUSMART_LCDC2_BASE, NUSMART_LCDC_CTRL, value);
+	lcdc_writel(panel_info.mmio, NUSMART_LCDC_CTRL, value);
 
 }
 	
@@ -154,6 +177,11 @@ void lcd_ctrl_init(void *lcdbase)
 
 #if defined(CONFIG_LCD_800_480_60)
         ns2815_pxl0_clk_set_rate(29232000,1);   
+//      ns2815_pxl0_clk_set_rate(43750000,0);   
+#endif
+
+#if defined(CONFIG_LCD_1280_720_60)
+        ns2815_pxl1_clk_set_rate(74250000,1);   
 //      ns2815_pxl0_clk_set_rate(43750000,0);   
 #endif
 
@@ -212,7 +240,7 @@ void lcd_enable(void)
 {
 	unsigned int value;
 
-	value = lcdc_readl(NUSMART_LCDC_BASE,NUSMART_LCDC_CTRL);
+	value = lcdc_readl(panel_info.mmio,NUSMART_LCDC_CTRL);
 	if(!(value & NUSMART_LCDC_ENABLE)){
 		if(panel_info.vl_bpix <= 4){
 			value |= (NUSMART_LCDC_ENABLE | NUSMART_LCDC_POLARITY | NUSMART_LCDC_RGB565);
@@ -225,7 +253,8 @@ void lcd_enable(void)
 	gpio_pinmux_config(4);	//lcd pannel on;gpioa4
 	nufront_set_gpio_value(4,1);
 
-#ifndef CONFIG_NS115_PAD_PROTOTYPE
+#if defined(CONFIG_NS115_PAD_REF)	
+				//pad_ref board
 	gpio_pinmux_config(4);	//lcd pannel on;gpioa4
 	nufront_set_gpio_value(4,1);
 	udelay(20000);
@@ -239,7 +268,8 @@ void lcd_enable(void)
 	udelay(30000);
 	gpio_pinmux_config(5);          //enable LCD_BL_ON;gpio5
 	nufront_set_gpio_value(5,1);
-#else 
+#endif
+#if defined(CONFIG_NS115_PAD_PROTOTYPE) 
 	                      //prototype board
 	gpio_pinmux_config(4);  //lcd normal mode;gpioa4
 	nufront_set_gpio_value(4,1);
@@ -297,9 +327,5 @@ void lcd_newline(void * row_sec, int scroll_size)
 		value |= NUSMART_LCDC_PTRF;
 	}
 	//	lcdc_writel(panel_info.mmio, NUSMART_LCDC_CTRL, value);
-#if defined(CONFIG_NS115_HDMI_STICK)
-	lcd_disable();
-#else
 	lcd_enable();
-#endif
 }

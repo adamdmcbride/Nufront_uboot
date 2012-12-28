@@ -161,8 +161,8 @@
        "resolution=1024x600\0" \
                "pmem_base=0xb3800000\0" \
         "splashimage=0x80007fc0\0"      \
-        "bootcmd=run default_bootargs;ext4load mmc 1:2 0x80007fc0 uImage;ns115 cpu volt 1130000;bootm\0"       \
-        "default_bootargs=setenv bootargs console=ttyS0,115200 pmem=${pmem_base} root=/dev/mmcblk1p2 rw rootwait mem=824M video=nusmartfb:${resolution}-${dispformat} init=/init\0" \
+        "bootcmd=run default_bootargs;ext4load mmc 1:2 0x80007fc0 uImage;ns115 cpu volt 1230000;bootm\0"       \
+        "default_bootargs=setenv bootargs console=ttyS0,115200 pmem=${pmem_base} root=/dev/mmcblk1p2 rw rootwait mem=824M video=nusmartfb:${resolution}-${dispformat} init=/init wifiethaddr=${wifimac}\0" \
 	"mmcupdate=fatload mmc 0:1 0x80007fc0 mmc_update;autoscr 0x80007fc0\0"  \
         "usbupdate=fatload usb 0:1 0x80007fc0 usb_update;autoscr 0x80007fc0\0"  \
         "splashpos=m,m         \0"   

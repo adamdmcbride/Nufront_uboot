@@ -3851,6 +3851,35 @@ int ns2815_cpu_dvfs(unsigned long rate, unsigned long volt)
 
 }
 
+int pmic_set_volt(unsigned long volt)
+{
+	unsigned int volt_set;
+
+	unsigned int i2c_num = 1;
+	void * i2c_base = (void*) (0x06100000+0x00010000*i2c_num);
+
+	if (volt < 750000) {
+		printf("ERROR: Voltage setting too small: at lease 0.75v\n");
+		return -EINVAL;
+	}
+	else if (volt > 1500000) {
+		printf("ERROR: Voltage setting too big: at most 1.5v\n");
+		return -EINVAL;
+	}
+
+	dw_i2c_master_init(i2c_base, 0x12);
+
+	// set volt
+	volt_set = (volt-600000+12500)/12500;
+	tps80032_i2c_set_reg(i2c_base, 0x5b, volt_set);
+
+	// calculate the actual voltage
+	volt = 600000-12500+volt_set*12500;
+	printf("pmic voltage set to %ld uV\n", volt);
+
+	return 0;
+}
+
 int pmic_set(unsigned long volt)
 {
 	unsigned int volt_set;
@@ -3897,9 +3926,22 @@ void pmic_i2c_set_reg(void * i2c_base, unsigned int addr, unsigned int value)
 	printf ("Set addr %x to value %x, readback is %x\n", addr, value, in_buf[0]);
 }
 
+void tps80032_i2c_set_reg(void * i2c_base, unsigned int addr, unsigned int value)
+{
+	unsigned char out_buf[2];
+	unsigned char in_buf[1];
 
+	out_buf[0] = (char) addr;
 
+	dw_i2c_smbus_read(i2c_base,out_buf,1,in_buf,1);	//read in_buf from out_buf;
 
+	out_buf[1] = (char)((in_buf[0] & 0xc0) | ((char)value));
+
+	dw_i2c_send_bytes(i2c_base, out_buf, 0x2);	//write out_buf[0] and out_buf[1];
+
+	dw_i2c_smbus_read(i2c_base, out_buf, 0x1, in_buf, 0x1);
+	printf ("Set addr %x to value %x, readback is %x\n", addr, value, in_buf[0]);
+}
 
 // Data flow tests
 

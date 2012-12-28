@@ -385,6 +385,24 @@ void printf(const char *fmt, ...)
 	puts(printbuffer);
 }
 
+void printbuf(const char *fmt, ...)
+{
+}
+
+/*
+void printbuf(const char *fmt, ...)
+{
+	va_list args;
+	va_start (args, fmt);
+
+	pLog += vsprintf (pLog, fmt, args);
+        va_end (args);
+
+        if(((int)pLog - (int)CFG_LOG_BUF) > 3840)
+                pLog = CFG_LOG_BUF;
+}
+*/
+
 void vprintf(const char *fmt, va_list args)
 {
 	uint i;

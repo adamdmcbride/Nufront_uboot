@@ -122,6 +122,15 @@ extern env_t *env_ptr;
 		}								   \
 	}
 
+#define NS115M_CPU_VOLT_CONFIG()							   \
+	if(strcmp(argv[1], "cpu_ns115m") == 0) {             				   \
+		if(strcmp(argv[2], "volt") == 0) {				   \
+			volt = simple_strtoul(argv[3], NULL, 10);	    	   \
+			pmic_set_volt(volt);						   \
+			return 0;                                                  \
+		}								   \
+	}
+
 
 #define  NS115_POWEROFF()   {                                                   \
 	if(strcmp(argv[1], "poweroff") == 0) {                                       \
@@ -432,6 +441,7 @@ int do_ns115(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	/*CPU DVFS*/
 	CPU_DVFS_CONFIG()
 	CPU_VOLT_CONFIG()
+	NS115M_CPU_VOLT_CONFIG()
 
 	/*Dataflow Test*/
 	DEV_DATAFLOW_TEST()
@@ -459,6 +469,8 @@ U_BOOT_CMD(
 	"ns115 <dev> pwr down: power down device <dev>\n"
 	"ns115 <dev> clk set <rate> <unit>: set clock rate for device <dev>\n"
         "ns115 cpu dvfs <rate> <volt>: ns115 cpu dvfs test\n"
+        "ns115 cpu volt  <volt>: set ns115 cpu volt\n"
+        "ns115 cpu_ns115m volt  <volt>: set ns115 cpu volt\n"
         "ns115 dtflow: ns115 dataflow tests\n"
         "ns115 efuse:  show ns115 serial number from efuse\n"
     );

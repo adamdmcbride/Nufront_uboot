@@ -55,6 +55,8 @@ int cpu_init (void)
 	/*
 	 * setup up stacks if necessary
 	 */
+
+	 unsigned int scu_power_state = 0;
 #ifdef CONFIG_USE_IRQ
 	IRQ_STACK_START = _armboot_start - CONFIG_SYS_MALLOC_LEN - CONFIG_SYS_GBL_DATA_SIZE - 4;
 	FIQ_STACK_START = IRQ_STACK_START - CONFIG_STACKSIZE_IRQ;
@@ -65,6 +67,10 @@ int cpu_init (void)
 
 	int bus_mode[] = {400,333,266,200};
 	int cpu_mode[] = {1200,1000,800,600};
+
+	scu_power_state = 0x03030000;
+	writel(scu_power_state,0x05040008);
+
 
 //	printf("cpu freq = %dMHz, bus freq = %dMhz\n",cpu_mode[(sysmode>>3)&0x3],bus_mode[(sysmode>>5)&0x3]);
 //	update_freq();

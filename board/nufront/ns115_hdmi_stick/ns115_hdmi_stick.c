@@ -68,7 +68,6 @@ int board_init (void)
 	writel(0x0,0x05822004);    
 	writel(0x01000000,0x05822008);
 
-	memset (NUFRONT_LCD1_BASE, 0x0, 0x00200000);
 
 #ifdef CONFIG_FASTBOOT_RECOVERY
 
@@ -293,6 +292,28 @@ static int charge_status()
 		
 }
 
+void read_hdmi_resolution()
+{
+	char *mem = (char*)0x80007fc0;
+	char *ext4_load[5]  = { "do_ext4_load","mmc","1:5","0x80007fc0", "property/persist.sys.hdmi.mode", };
+	int load_cfg = -1;
+	int filesize;
+	unsigned int mmc_cont = (*((unsigned int*)0x0704e04c)) ? 1 : 0;
+
+	setenv("filesize", "0");
+	if(mmc_cont == 0) {
+	} else {
+		memset(mem, 0x00, 64);
+		load_cfg = do_ext4_load(NULL, 0, 5, ext4_load);
+		filesize=simple_strtoul(getenv("filesize"), NULL, 16);
+		printf("HDMI res: %s\n", mem);
+		if(filesize > 5) {
+			setenv("lcdres", mem);
+		}
+		printf("HDMI env: %s\n", getenv("lcdres"));
+	}
+}
+
 void read_boot_env(void)
 {
         int ret,selboot = 0;
@@ -303,7 +324,7 @@ void read_boot_env(void)
         unsigned int  size;
 
     	extern unsigned int _xloader_boot_mode;
-    
+
 	if(fastboot_flag || _xloader_boot_mode == 0x02){
 		printf("fastboot mode\n");
 		do_fastboot(NULL,0,1,do_fastboot);

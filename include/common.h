@@ -137,6 +137,13 @@ typedef volatile unsigned char	vu_char;
 #define BUG_ON(condition) do { if (unlikely((condition)!=0)) BUG(); } while(0)
 #endif /* BUG */
 
+#define KERN_UART     1
+#define KERN_ERROR    2
+#define KERN_INFO     3
+#define KERN_DEBUG    4
+#define TRACE(level,fmt,args...)  (((level) <= CURRENT_DEBUG_LEVEL) ? printf(fmt,##args) : printbuf(fmt,##args))
+
+
 typedef void (interrupt_handler_t)(void *);
 
 #include <asm/u-boot.h> /* boot information for Linux kernel */
@@ -628,6 +635,7 @@ void	panic(const char *fmt, ...)
 int	sprintf(char * buf, const char *fmt, ...)
 		__attribute__ ((format (__printf__, 2, 3)));
 int	vsprintf(char *buf, const char *fmt, va_list args);
+void printbuf(const char *fmt, ...);
 
 /* lib_generic/strmhz.c */
 char *	strmhz(char *buf, long hz);
@@ -733,5 +741,6 @@ int cpu_release(int nr, int argc, char *argv[]);
 #define __ALIGN_MASK(x,mask)	(((x)+(mask))&~(mask))
 void    read_boot_env (void);
 extern unsigned int disp_flag;	//display flag
+void read_hdmi_resolution();
 
 #endif	/* __COMMON_H_ */

@@ -3095,6 +3095,9 @@ realview_pb11mp_config	:	unconfig
 	@chmod a+x board/armltd/realview_pb/split_by_variant.sh 
 	@board/armltd/realview_pb/split_by_variant.sh $@ $(CC)
 
+ns115_phone_config: unconfig
+	@$(MKCONFIG) $(@:_config=) arm ns115 ns115_phone  nufront
+
 ns115_test_config: unconfig
 	@$(MKCONFIG) $(@:_config=) arm ns115 ns115_test  nufront
 

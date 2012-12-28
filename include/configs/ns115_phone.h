@@ -37,7 +37,8 @@
 #define CONFIG_SYS_TIMERBASE  		0x06150000 
 #define CONFIG_SYS_NS16550_COM1		0x06090000
 
-#define CONFIG_NS115_HDMI_STICK
+
+#define CONFIG_NS115_TEST
 
 #define CONFIG_SYS_ALT_MEMTEST 1
 #define CONFIG_SYS_MEMTEST_START       	0x80000000
@@ -57,11 +58,14 @@
 #define CONFIG_SYS_MALLOC_LEN	(CONFIG_ENV_SIZE + 128 * 1024)
 #define CONFIG_SYS_GBL_DATA_SIZE	128	/* size in bytes reserved for initial data */
 
+//#define SP810_OS_SCSYSSTAT      (0x00000004)    /* System status register */
+//#define REALVIEW_PB_SCTL_BASE   0x10001000 
 /*
  * Hardware drivers
  */
 //#define CONFIG_DRIVER_NUSMART_EMAC
 
+//serial option
 #define CONFIG_BAUDRATE		115200
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200 }
 
@@ -84,10 +88,11 @@
  */
 #define CONFIG_CMD_BDI
 #define CONFIG_CMD_USB
-//#define CONFIG_CMD_DHCP
+#define CONFIG_CMD_DHCP
 #define CONFIG_CMD_ENV
 //#define CONFIG_CMD_FLASH
 //#define CONFIG_CMD_IMI
+#define CONFIG_CMD_NS2816
 #define CONFIG_CMD_MEMORY
 #define CONFIG_CMD_NET
 #define CONFIG_CMD_PING
@@ -100,9 +105,6 @@
 #define CONFIG_CMD_BRINGUP
 #define CONFIG_CMD_SOURCE      1
 #define CONFIG_CMD_ECHO        1
-#define CONFIG_CMD_BMP
-#define CONFIG_SPLASH_SCREEN
-#define CONFIG_SPLASH_SCREEN_ALIGN
 
 #define CONFIG_CMDLINE_EDITING    1
 #define CONFIG_AUTO_COMPLETE
@@ -110,8 +112,8 @@
 #define CONFIG_CMD_AUTOSCRIPT
 #define CONFIG_SYS_PROMPT_HUSH_PS2      "> "
 
-//#define CONFIG_USB_ETHER_ASIX
-//#define CONFIG_USB_HOST_ETHER
+#define CONFIG_USB_ETHER_ASIX
+#define CONFIG_USB_HOST_ETHER
 
 /*
  * BOOTP options
@@ -124,14 +126,13 @@
 #define CONFIG_BOOTP_SERVERIP
 
 #define CONFIG_BOOTDELAY	2
-#define CONFIG_SERIAL_TAG
 
 /*
  * Static configuration when assigning fixed address
  */
-//#define CONFIG_NETMASK  255.255.255.0
-//#define CONFIG_IPADDR   192.168.22.240    
-//#define CONFIG_SERVERIP 192.168.22.113
+#define CONFIG_NETMASK  255.255.255.0
+#define CONFIG_IPADDR   192.168.22.240    
+#define CONFIG_SERVERIP 192.168.22.207
 #define CONFIG_BOOTFILE uImage 
 //#define CONFIG_GATEWAYIP 192.168.22.1
 #define CONFIG_STDIN serial
@@ -141,12 +142,12 @@
 /*
  * Miscellaneous configurable options
  */
-#define CONFIG_SYS_LONGHELP			/* undef to save memory		 */
+
+#define CONFIG_SYS_LONGHELP	/* undef to save memory		 */
 #define CONFIG_SYS_CBSIZE	256		/* Console I/O Buffer Size	*/
 /* Monitor Command Prompt   */
-#define CONFIG_SYS_PROMPT	"NS115_HDMI_STICK # "
-#define CONFIG_IDENT_STRING "\n\n***  NS115 HDMI STICK Board V1.7***\n\n"
-#define CONFIG_FASTBOOT_GETVAR_VERSION  "NS115"
+#define CONFIG_SYS_PROMPT	"NS115_phone # "
+#define CONFIG_IDENT_STRING "\n\n***  NS115 phone Board V1.0 ***\n\n"
 /* Print Buffer Size */
 #define CONFIG_SYS_PBSIZE	(CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)
 #define CONFIG_SYS_MAXARGS	64		/* max number of command args	 */
@@ -156,11 +157,11 @@
 
 
 #define CONFIG_EXTRA_ENV_SETTINGS       \
-	"lcdres=1280x720\0"	\
+	"dispformat=16\0"       \
 	"pmem_base=0xb3800000\0" \
         "splashimage=0x80007fc0\0"      \
         "bootcmd=run default_bootargs;ext4load mmc 1:2 0x80007fc0 uImage;bootm\0"       \
-        "default_bootargs=setenv bootargs console=ttyS0,115200 pmem=${pmem_base} root=/dev/mmcblk1p2 rw rootwait mem=824M init=/init video=nusmartfb:${lcdres} wifiethaddr=${wifimac}\0" \
+        "default_bootargs=setenv bootargs console=ttyS0,115200 pmem=${pmem_base} root=/dev/mmcblk1p2 rw rootwait mem=824M init=/init\0" \
         "mmcupdate=fatload mmc 0:1 0x80007fc0 mmc_update;autoscr 0x80007fc0\0"  \
         "usbupdate=fatload usb 0:1 0x80007fc0 usb_update;autoscr 0x80007fc0\0"  \
         "splashpos=m,m         \0"   
@@ -225,29 +226,98 @@
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
-
+/*
+ *  Use the CFI flash driver for ease of use
+ */
+//#define CONFIG_SYS_FLASH_CFI
 #define CONFIG_SYS_NO_FLASH 1
+//#define CONFIG_FLASH_CFI_DRIVER
+
 //#define CONFIG_CH7033_HDMI  1
+
 //#define CONFIG_ENV_IS_NOWHERE 1
 #define CONFIG_ENV_IS_IN_EMMC	1		/* env in EMMC */
 //#define CONFIG_ENV_IS_IN_SPI_FLASH	1		/* env in flash */
-//#define CONFIG_SPI_FLASH_SST_25WF
+#define CONFIG_SPI_FLASH_SST_25WF
+
+
+//#ifndef CONFIG_REALVIEW_PB1176
+//# define CONFIG_SYS_FLASH_BASE		0x40000000
+//#else
+//# define CONFIG_SYS_FLASH_BASE		0x30000000
+//#endif
+//#define CONFIG_SYS_MAX_FLASH_BANKS	(1)		/* max number of memory banks */
+
+/* timeout values are in ticks */
+//#define CONFIG_SYS_FLASH_ERASE_TOUT	(2*CFG_HZ)	/* Timeout for Flash Erase */
+//#define CONFIG_SYS_FLASH_WRITE_TOUT	(2*CFG_HZ)	/* Timeout for Flash Write */
+
+//#define CONFIG_SYS_MAX_FLASH_SECT	(259)		/* The maximum number of sectors we may need to hold data about */
+						/* 255 0x40000 sectors plus first or last sector may have 4 erase regions == 259 */
+						/* Has room for pre-production boards which had 256 * 0x40000 sectors */
+//#define FLASH_MAX_SECTOR_SIZE	(0x00010000)	/* 64 KB sectors */
+//#define FLASH_MIN_SECTOR_SIZE	(0x00001000)	/*  4 KB sectors */
+
+/* Room required on the stack for the environment data */
 #define CONFIG_ENV_SECT_SIZE	512 
 #define CONFIG_ENV_SIZE     (8192) 
+/* 
+ * Since we don't know which end has the small erase blocks 
+ * or indeed whether they are present
+ * we use the penultimate full sector location
+ * for the environment - we save a full sector even tho 
+ * the real env size CONFIG_ENV_SIZE is probably less
+ * Maintain the distinction since we want to make stack size as small as possible 
+ */
+/* Amount of flash used for environment */
+//#define CONFIG_ENV_SECT_SIZE	FLASH_MIN_SECTOR_SIZE 
+// #define CONFIG_SYS_MONITOR_LEN	       (4 * FLASH_SECTOR_SIZE)
+// #define ARM_BM_START		(CONFIG_SYS_FLASH_BASE)
+//
+/* 
+ * Top of flash must NOT be defined using sectors
+ * Board variants may have differing flash components
+ */
+ 
+//#define PHYS_FLASH_SIZE         (0x80000)	/* 512KB */
+//#define FLASH_TOP		(PHYS_FLASH_SIZE)
+
+//#define CONFIG_ENV_ADDR		(FLASH_TOP - (2 * CONFIG_ENV_SECT_SIZE))
 #define CONFIG_ENV_OFFSET	(CONFIG_ENV_ADDR)
 #define CONFIG_ENV_ADDR          4592
+//#define CONFIG_SYS_FLASH_PROTECTION	/* The devices have real protection */
+//#define CONFIG_SYS_FLASH_EMPTY_INFO	/* flinfo indicates empty blocks */
+
+
+/// Nusmart option/
+//#define CONFIG_NUSMART_MMC 1
+//#define CONFIG_MMC 1
+//#define CONFIG_DOS_PARTITION 1
+//#define CONFIG_ISO_PARTITION 1
+
+//SATA
+//#define CONFIG_NUSMART_AHCI  1
+//#define CONFIG_SATA_ULI5288
+//#define CONFIG_SYS_SCSI_MAX_SCSI_ID	4
+//#define CONFIG_SYS_SCSI_MAX_SCSI_ID	1
+//#define CONFIG_SYS_SCSI_MAX_LUN	1
+//#define CONFIG_SYS_SCSI_MAX_DEVICE	(CONFIG_SYS_SCSI_MAX_SCSI_ID * CONFIG_SYS_SCSI_MAX_LUN)
+//#define CONFIG_SYS_SCSI_MAXDEVICE	CONFIG_SYS_SCSI_MAX_DEVICE
+
+//#define CONFIG_LBA48	1
+
+//#define CONFIG_CMD_SCSI 1
+
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV 1
+//#define CONFIG_CONSOLE_MUX 1 			//it is the imx use it 
 
 #define CONFIG_LCD 
 #define CONFIG_NUSMART_LCD
-#define CONFIG_NUSMART_LCD_RGB555
-//#define EVA_LCDC
-//#define LCD_BPP    LCD_COLOR8
+#define EVA_LCDC
+#define LCD_BPP    LCD_COLOR8
 #define CONFIG_SYS_WHITE_ON_BLACK
-//#define CONFIG_LCD_LOGO
-//#define CONFIG_LCD_1024_600_60
-#define CONFIG_LCD_1280_720_60
-#define CONFIG_NUSMART_BMP
+#define CONFIG_LCD_LOGO
+#define CONFIG_LCD_1024_600_60
 
 
 //#define CONFIG_LOGICTILE 1
@@ -270,12 +340,14 @@
 //#define CONFIG_SYS_USB_OHCI_SLOT_NAME           "ohci"
 
 #define CONFIG_CMD_NS115 1
-#define CONFIG_FASTBOOT_RECOVERY
-#define CONFIG_RECOVERY
 //#define CONFIG_PL330_DMA 1
 
 #define CONFIG_PRCM_CLOCK 1
-#define CONFIG_ENV_OVERWRITE    
+#define CONFIG_ENV_OVERWRITE    //if no define Ethernet Address and serial# number can be set only once
+
+//#define CONFIG_ROW_NUM 48
+//#define CONFIG_LINE_BEGIN 16
+//#define CONFIG_MAX_OS 8
 
 /*
     MMC env and MMC driver 
@@ -289,5 +361,10 @@
 #define CONFIG_DOS_PARTITION 1
 
 #define CONFIG_SYS_MEMTEST_SCRATCH 0x8FFFFFF0
+//#define CONFIG_LOGICTILE 1
+
+
+//#define CONFIG_BOOTARGS "root=/dev/mmcblk0p3 rw rootwait mem=128M console=ttyS0,115200 video=nusmartfb:640x480 init=/init"
+//#define CONFIG_BOOTCOMMAND "mmc init; fatload mmc 0:1 0x80007fc0 uImage;md 0x80007fc0"
 
 #endif							/* __CONFIG_H */

@@ -451,11 +451,20 @@ void start_armboot (void)
 		if(i > 0)
 			gd->fb_base = simple_strtoul (pmem_addr, NULL, 16);
 		else
+#if defined(CONFIG_NS115_PAD_REF) || defined (CONFIG_NS115_PAD_PROTOTYPE)
 			gd->fb_base = 0xb3800000;
+#endif
+#ifdef	CONFIG_NS115_HDMI_STICK
+			gd->fb_base = 0xb4800000;
+#endif
 //		gd->fb_base = 0xb3800000;
 //		gd->fb_base = addr;
 	}
 #endif /* CONFIG_LCD */
+
+#ifdef  CONFIG_NS115_HDMI_STICK
+	read_hdmi_resolution();
+#endif
 
 #if defined(CONFIG_CMD_NAND)
 	puts ("NAND:  ");
@@ -518,7 +527,24 @@ void start_armboot (void)
 				do_mmc(NULL, 0, 6, mmc_read);
 			}
 		}
-	}	
+	}
+#if defined(CONFIG_NS115_HDMI_STICK)
+	mmc_cont = (*((unsigned int*)0x0704e04c)) ? 1 : 0;
+	if(mmc_cont == 1){
+		char *mmc_read[] = {"mmc", "read", "1", "0x80006000","2053","1" };
+		do_mmc(NULL, 0, 6, mmc_read);
+		char *mmc_buf = (char *) 0x80006000;
+		char mac_flag[] = "WIFIMAC0";
+		char mac_buf[20];
+		if(!strncmp(mmc_buf,mac_flag,strlen(mac_flag))){
+			memcpy(mac_buf,mmc_buf + 28,6);
+			sprintf((char *)mac_buf,"%02x:%02x:%02x:%02x:%02x:%02x",mmc_buf[28],mmc_buf[29],
+				mmc_buf[30],mmc_buf[31],mmc_buf[32],mmc_buf[33]);
+			setenv("wifimac",mac_buf);
+		}
+	}
+#endif
+		
 #ifdef CONFIG_VFD
 	/* must do this after the framebuffer is allocated */
 	drv_vfd_init();
@@ -619,7 +645,9 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 #endif
 
 #ifdef CONFIG_FASTBOOT_RECOVERY
-	read_boot_env();
+	if(mmc_cont == 1){
+		read_boot_env();
+	}
 #endif
 
 	console_init_r ();	/* fully init console as a device */
