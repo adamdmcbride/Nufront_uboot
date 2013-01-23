@@ -50,7 +50,9 @@
 #include <mmc.h>
 #include <asm/arch/gpio.h>
 //#include <asm/arch/mmc.h>
-
+#include <battary.h>
+#include <lcd.h>
+#include <draw_icon.h>
 
 #ifdef CONFIG_DRIVER_SMC91111
 #include "../drivers/net/smc91111.h"
@@ -64,6 +66,15 @@ DECLARE_GLOBAL_DATA_PTR;
 ulong monitor_flash_len;
 unsigned int disp_flag = 0;
 extern int  fastboot_flag;
+int show_charging_logo(int volt);
+
+#define BOOTUP	2
+#define RESUME	1
+#define SUSPEND	0
+#define RELEASE	0
+#define PRESSED	1
+int suspend_flag = RESUME;
+extern vidinfo_t panel_info;
 
 #ifdef CONFIG_HAS_DATAFLASH
 extern int  AT91F_DataflashInit(void);
@@ -351,6 +362,23 @@ void setup_realview_board_info(void)
 }
 #endif	/* CONFIG_REALVIEW */
 
+#ifdef CONFIG_UBOOT_CHARGER
+void resume(void)
+{
+	printf("resume\n");
+	lcd_enable();
+	suspend_flag = RESUME;
+}
+
+void suspend(void)
+{
+	printf("suspend\n");
+	clear_logo();
+	lcd_disable();
+	suspend_flag = SUSPEND;
+}
+#endif
+
 void start_armboot (void)
 {
 	int i,size = 0;
@@ -411,7 +439,7 @@ void start_armboot (void)
 	display_flash_config (flash_init ());
 #endif /* CONFIG_SYS_NO_FLASH */
 
-#ifdef CONFIG_NS115_PAD_REF
+#if defined(CONFIG_NS115_PAD_REF) || defined (CONFIG_NS115_PAD_PROTOTYPE)
 	power_key_delay();
 #endif
 
@@ -444,23 +472,254 @@ void start_armboot (void)
 		addr = (_bss_end + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1);
 		//addr = 0xF7000000;
 		lcd_setmem (addr);
-		char pmem_addr[20];
-		int i = 0;
-		i = getenv_r ("pmem_base", pmem_addr, sizeof(pmem_addr));
+//		char pmem_addr[20];
+//		int i = 0;
+//		i = getenv_r ("pmem_base", pmem_addr, sizeof(pmem_addr));
 //		unsigned int *a = getenv("fbaddr");
-		if(i > 0)
-			gd->fb_base = simple_strtoul (pmem_addr, NULL, 16);
-		else
+//		if(i > 0)
+//			gd->fb_base = simple_strtoul (pmem_addr, NULL, 16);
+//		else
 #if defined(CONFIG_NS115_PAD_REF) || defined (CONFIG_NS115_PAD_PROTOTYPE)
-			gd->fb_base = 0xb3800000;
+		gd->fb_base = 0xb3800000;
 #endif
 #ifdef	CONFIG_NS115_HDMI_STICK
-			gd->fb_base = 0xb4800000;
+		gd->fb_base = 0xb4800000;
 #endif
 //		gd->fb_base = 0xb3800000;
 //		gd->fb_base = addr;
 	}
 #endif /* CONFIG_LCD */
+
+	unsigned int mmc_cont = (*((unsigned int*)0x0704e04c)) ? 1 : 0;
+	unsigned int recovery_flag = 1;
+#ifdef CONFIG_FASTBOOT_RECOVERY
+	if(mmc_cont == 1){
+		recovery_flag = read_boot_env();
+	}
+#endif
+
+#ifdef CONFIG_UBOOT_CHARGER
+if(recovery_flag != 0)
+{
+	unsigned int *s_volt;
+	unsigned int low_bat_volt = 0;
+	unsigned int lcd_en_volt = 0;
+	unsigned int charge_flag = 0, pre_charge_flag = 0, bat_flag = 0;
+	unsigned int lcd_flag = 0, is_adapter_pullout = 0;
+	unsigned int volt = 0, ret = 0, key_pressed = 0, idle_time = 0, key_status = RELEASE;
+#ifdef CONFIG_NS115_PAD_PROTOTYPE
+	unsigned int lcd_on = 0, charger_type = 0;
+#endif
+
+	if ((s_volt = getenv ("poweroff_lcd")) != NULL){
+		lcd_en_volt = simple_strtoul (s_volt, NULL, 10);
+		printf("poweroff_lcd  = %d \n",lcd_en_volt);
+	}
+	else{
+		lcd_en_volt = 3100;
+		printf("poweroff_lcd default = %d \n",lcd_en_volt);
+	}
+
+	if ((s_volt = getenv ("poweroff_volt")) != NULL){
+		low_bat_volt = simple_strtoul (s_volt, NULL, 10);
+		printf("latch_volt = %d \n",low_bat_volt);
+	}
+	else{
+		low_bat_volt = 3100;
+		printf("latch_volt default = %d \n",low_bat_volt);
+	}
+
+	volt = read_battary_volt();
+	draw_init(gd->fb_base, panel_info.vl_row, panel_info.vl_col);
+#ifdef CONFIG_NS115_PAD_PROTOTYPE
+	if(power_on_by_AC()){
+		pmic_gpio_init();
+		charger_type = detect_charge_status();//1 is AC and 2 is usb
+		printf("now volt = %d charger_type=%d\n", volt,charger_type);
+		if(charger_type == 2)//when usb pluged in,can't bright up the lcd!
+			lcd_on = 0;
+		else
+			lcd_on = 1;
+#endif
+	while(1){
+		bat_flag = charge_status();
+		charge_flag = detect_charge_status();
+		if ((0 == bat_flag) && (0 == pre_charge_flag)){
+			break;
+		}
+		if ((0 == charge_flag) && (0 != pre_charge_flag)){
+			is_adapter_pullout = 1;//judge is adapter pullout or never insert adapter
+		}
+		pre_charge_flag = charge_flag;
+		volt = read_battary_volt();
+		printf("test flag %d volt %d\n", charge_flag, volt);
+
+		if (charge_flag){
+			if (volt < lcd_en_volt){
+				suspend_flag = SUSPEND;
+				if (lcd_flag == 1){
+					lcd_disable ();
+					lcd_flag = 0;
+				}
+				//do nothing, wait for volt > lcd_en_volt
+				udelay(5000*1000);//check volt every 5s
+			}
+			else if (volt > lcd_en_volt){
+				if (suspend_flag == RESUME){
+					int i = 0, draw_level = 0;
+
+					if (volt >= 4200){
+						draw_level = 0;
+					}
+					else if (volt < 4200 && volt >= 4000){
+						draw_level = 1;
+					}
+					else if (volt < 4000 && volt >= 3700){
+						draw_level = 2;
+					}
+					else if (volt < 3700 && volt >= 3400){
+						draw_level = 3;
+					}
+					else if (volt < 3400 && volt >= 3200){
+						draw_level = 4;
+					}
+					else if (volt < 3200){
+						draw_level = 5;
+					}
+
+					if (lcd_flag == 0){
+						show_bat_framework(LOGO_H, LOGO_W);
+						lcd_enable();
+						lcd_flag = 1;
+					}
+
+					for (i = draw_level; i >= 0; i--){
+						int j = 0;
+						show_bat_status(LOGO_H, LOGO_W, i);
+						for (j = 0; j < LOGO_SHOW_DELAY; j++){
+							udelay(PRESS_DELAY);
+							if (power_key_status()){//key pressed
+								key_pressed++;
+								key_status = PRESSED;
+								if(key_pressed > LONG_PRESS){
+									key_pressed = 0;
+									suspend_flag = BOOTUP;
+									break;
+								}
+							} else {
+								key_status = RELEASE;
+							}
+
+							if (key_status == RELEASE) {
+								if(key_pressed > LONG_PRESS){//long pressed
+									key_pressed = 0;
+									idle_time = 0;
+									suspend_flag = BOOTUP;
+									break;//boot up
+								} else if (key_pressed >= 1){
+									suspend();
+									key_pressed = 0;
+									idle_time = 0;
+								} else if (key_pressed > 0) {
+									key_pressed = 0;
+									idle_time = 0;
+								} else {
+									idle_time++;
+								}
+
+								if (idle_time >= IDLE_DELAY){
+									suspend();
+									key_pressed = 0;
+									idle_time = 0;
+								}
+							}
+						}
+					}
+				} else if (suspend_flag == SUSPEND){
+					int j = 0;
+					for (j = 0; j < LOGO_SHOW_DELAY; j++){
+						udelay(PRESS_DELAY);
+						if (power_key_status()){//key pressed
+							key_pressed++;
+							key_status = PRESSED;
+							if(key_pressed > LONG_PRESS){
+								key_pressed = 0;
+								suspend_flag = BOOTUP;
+								break;
+							}
+						} else {
+							key_status = RELEASE;
+						}
+
+						if (key_status == RELEASE){
+							if(key_pressed > LONG_PRESS){//long pressed
+								key_pressed = 0;
+								suspend_flag = BOOTUP;
+							}else if(key_pressed >= 1){
+								lcd_flag = 0;
+								resume();
+								key_pressed = 0;
+								idle_time = 0;
+							} else {
+								key_pressed = 0;
+							}
+						}
+					}
+				} else if (suspend_flag == BOOTUP) {
+					int volt_percent = (volt*100)/4200;
+					if (volt_percent > 100){
+						volt_percent = 100;
+					}
+					char *volt_buff = itoa(volt_percent);
+					clear_logo();
+					lcd_disable();
+					setenv("volt_buff",volt_buff);
+					printf("BOOTUP\n");
+					break;
+				}
+			}
+			else {
+				printf("error proccess, please check codes\n");
+			}
+		}
+		else {
+			if (volt < lcd_en_volt){
+				if (lcd_flag == 1){
+					lcd_disable ();
+					lcd_flag = 0;
+				}
+				ricoh583_poweroff();
+			}
+			else if (volt > lcd_en_volt && volt < low_bat_volt){
+				if (lcd_flag == 0){
+					draw_init(gd->fb_base, panel_info.vl_row, panel_info.vl_col);
+					lcd_flag = 1;
+				}
+
+				show_bat_status(LOGO_H, LOGO_W, 5);
+				udelay(3500*1000);
+				ricoh583_poweroff();
+			}
+			else if (volt > low_bat_volt){
+				if (lcd_flag == 1){
+					clear_logo();
+					lcd_disable ();
+					lcd_flag = 0;
+				}
+				if (is_adapter_pullout){
+					ricoh583_poweroff();
+				}
+				else{
+					break;
+				}
+			}
+		}
+	}
+#ifdef CONFIG_NS115_PAD_PROTOTYPE
+	}
+#endif
+}
+#endif
 
 #ifdef  CONFIG_NS115_HDMI_STICK
 	read_hdmi_resolution();
@@ -487,7 +746,6 @@ void start_armboot (void)
 	char *str;
 	char *disp32bit = "32";
 	char *disp16bit = "16";
-	unsigned int mmc_cont = (*((unsigned int*)0x0704e04c)) ? 1 : 0;
 	if (( str = getenv("dispformat")) != NULL) {
 		copy_filename(disp_format, str,sizeof (disp_format));
 		if(strncmp(disp32bit,disp_format,3) == 0){
@@ -511,21 +769,41 @@ void start_armboot (void)
 		}
 	} else {
 		if(disp_flag == 0){	//16bit
+#if defined(CONFIG_NS115_HDMI_STICK)
 			if(mmc_cont == 0){
-	 			char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","8800","1000" };
+				char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","8800","9000" };
 				do_mmc(NULL, 0, 6, mmc_read);
 			}else if(mmc_cont == 1) {
-	 			char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","8800","1000" };
+				char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","8800","9000" };
 				do_mmc(NULL, 0, 6, mmc_read);
 			}
+#else
+			if(mmc_cont == 0){
+				char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","8800","1000" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}else if(mmc_cont == 1) {
+				char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","8800","1000" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}
+#endif
 		}else if(disp_flag == 1){	//32bit
+#if defined(CONFIG_NS115_HDMI_STICK)
 			if(mmc_cont == 0){
-	 			char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","5210","1500" };
+				char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","8800","9000" };
 				do_mmc(NULL, 0, 6, mmc_read);
 			}else if(mmc_cont == 1) {
-	 			char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","5210","1500" };
+				char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","8800","9000" };
 				do_mmc(NULL, 0, 6, mmc_read);
 			}
+#else
+			if(mmc_cont == 0){
+				char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","5210","1500" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}else if(mmc_cont == 1) {
+				char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","5210","1500" };
+				do_mmc(NULL, 0, 6, mmc_read);
+			}
+#endif
 		}
 	}
 #if defined(CONFIG_NS115_HDMI_STICK)
@@ -644,11 +922,11 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 	
 #endif
 
-#ifdef CONFIG_FASTBOOT_RECOVERY
-	if(mmc_cont == 1){
-		read_boot_env();
-	}
-#endif
+//#ifdef CONFIG_FASTBOOT_RECOVERY
+//	if(mmc_cont == 1){
+//		read_boot_env();
+//	}
+//#endif
 
 	console_init_r ();	/* fully init console as a device */
 

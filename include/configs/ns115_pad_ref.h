@@ -146,7 +146,7 @@
 #define CONFIG_SYS_CBSIZE	256		/* Console I/O Buffer Size	*/
 /* Monitor Command Prompt   */
 #define CONFIG_SYS_PROMPT	"NS115_PAD_REF # "
-#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD REF Board V4.2***\n\n"
+#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD REF Board V4.5***\n\n"
 //#define CONFIG_FASTBOOT_GET_VAR_BASEBAND_STRING "NS115"
 #define CONFIG_FASTBOOT_GETVAR_VERSION  "NS115"
 /* Print Buffer Size */
@@ -158,13 +158,15 @@
 
 
 #define CONFIG_EXTRA_ENV_SETTINGS       \
-	"dispformat=16\0"       \
-	"pmem_base=0xb3800000\0" \
+	"dispformat=32\0"       \
+	"pmem_base=0xb1800000\0" \
         "splashimage=0x80007fc0\0"      \
         "bootcmd=run default_bootargs;ext4load mmc 1:2 0x80007fc0 uImage;ns115 cpu volt 1230000;bootm\0"       \
-        "default_bootargs=setenv bootargs console=ttyS0,115200 pmem=${pmem_base} root=/dev/mmcblk1p2 rw rootwait mem=824M video=nusmartfb:1024x600-${dispformat} init=/init wifiethaddr=${wifimac}\0" \
+        "default_bootargs=setenv bootargs console=ttyS0,115200 pmem=${pmem_base} root=/dev/mmcblk1p2 rw rootwait mem=792M batt=${volt_buff} video=nusmartfb:1024x600-${dispformat} init=/init wifiethaddr=${wifimac}\0" \
         "mmcupdate=fatload mmc 0:1 0x80007fc0 mmc_update;autoscr 0x80007fc0\0"  \
         "usbupdate=fatload usb 0:1 0x80007fc0 usb_update;autoscr 0x80007fc0\0"  \
+	"poweroff_volt=3200\0"							\
+	"poweroff_lcd=3200\0"							\
         "splashpos=m,m         \0"   
 
 /*
@@ -340,6 +342,9 @@
 //#define CONFIG_ROW_NUM 48
 //#define CONFIG_LINE_BEGIN 16
 //#define CONFIG_MAX_OS 8
+
+/* charger susport*/
+#define CONFIG_UBOOT_CHARGER
 
 /*
     MMC env and MMC driver 

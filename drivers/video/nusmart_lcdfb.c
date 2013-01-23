@@ -153,6 +153,7 @@ void lcd_disable(void)
 	}
 	lcdc_writel(panel_info.mmio, NUSMART_LCDC_CTRL, value);
 
+	nufront_set_gpio_value(5,0);
 }
 	
 void bpix_init(void)
@@ -243,22 +244,29 @@ void lcd_enable(void)
 	value = lcdc_readl(panel_info.mmio,NUSMART_LCDC_CTRL);
 	if(!(value & NUSMART_LCDC_ENABLE)){
 		if(panel_info.vl_bpix <= 4){
+#if defined(CONFIG_NS115_HDMI_STICK) && defined(CONFIG_LCD_1280_720_60)
+			value |= (NUSMART_LCDC_ENABLE | NUSMART_LCDC_RGB565);
+#endif
+#if defined(CONFIG_NS115_PAD_REF) || defined(CONFIG_NS115_PAD_PROTOTYPE)
 			value |= (NUSMART_LCDC_ENABLE | NUSMART_LCDC_POLARITY | NUSMART_LCDC_RGB565);
+#endif
 		}else{
+#if defined(CONFIG_NS115_HDMI_STICK) && defined(CONFIG_LCD_1280_720_60)
+			value |= (NUSMART_LCDC_ENABLE | NUSMART_LCDC_RGB888);
+#endif
+#if defined(CONFIG_NS115_PAD_REF) || defined(CONFIG_NS115_PAD_PROTOTYPE)
 			value |= (NUSMART_LCDC_ENABLE | NUSMART_LCDC_POLARITY | NUSMART_LCDC_RGB888);
+#endif
 		}
 	}
 	lcdc_writel(panel_info.mmio, NUSMART_LCDC_CTRL, value);
 
 	gpio_pinmux_config(4);	//lcd pannel on;gpioa4
 	nufront_set_gpio_value(4,1);
+	udelay(50000);
 
 #if defined(CONFIG_NS115_PAD_REF)	
 				//pad_ref board
-	gpio_pinmux_config(4);	//lcd pannel on;gpioa4
-	nufront_set_gpio_value(4,1);
-	udelay(20000);
-
 	gpio_pinmux_config(94);         //LVDS set to 1;gpioc30
 	nufront_set_gpio_value(94,1);
 	udelay(300000);
@@ -271,23 +279,20 @@ void lcd_enable(void)
 #endif
 #if defined(CONFIG_NS115_PAD_PROTOTYPE) 
 	                      //prototype board
-	gpio_pinmux_config(4);  //lcd normal mode;gpioa4
-	nufront_set_gpio_value(4,1);
-	udelay(20000);
 
   	gpio_pinmux_config(2);  //lcd vdd on;gpioa2
 	nufront_set_gpio_value(2,1);
-	udelay(20000);
+	udelay(100000);
 	       
 	gpio_pinmux_config(1);  //lcd bias on;gpioa1
 	nufront_set_gpio_value(1,1);
-	udelay(20000);
+	udelay(250000);
 	
-	//set pwm
-	writel(0x00028428, 0x06160000);
-	udelay(30000);
 	gpio_pinmux_config(5);          //enable LCD_BL_ON;gpio5
 	nufront_set_gpio_value(5,1);
+	//set pwm
+//	writel(0x00028428, 0x06160000);
+//	udelay(30000);
 #endif
 }
 

@@ -910,5 +910,10 @@ static void *lcd_logo (void)
 #endif /* CONFIG_LCD_LOGO && !CONFIG_LCD_INFO_BELOW_LOGO */
 }
 
+void set_bgfg(void){
+       lcd_setfgcolor (CONSOLE_COLOR_WHITE);
+       lcd_setbgcolor (CONSOLE_COLOR_BLACK);
+}
+
 /************************************************************************/
 /************************************************************************/

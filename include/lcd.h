@@ -28,6 +28,7 @@
 
 #ifndef _LCD_H_
 #define _LCD_H_
+#include <linux/types.h>
 
 extern char lcd_is_enabled;
 

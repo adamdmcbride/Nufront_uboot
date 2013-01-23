@@ -40,8 +40,10 @@ COBJS-y += memsize.o
 COBJS-y += s_record.o
 COBJS-$(CONFIG_SERIAL_MULTI) += serial.o
 COBJS-y += stdio.o
+COBJS-y += stdlib.o
 COBJS-y += xyzModem.o
 COBJS-y += fastboot.o
+COBJS-y += cmd_battary.o
 
 # core command
 COBJS-y += cmd_boot.o

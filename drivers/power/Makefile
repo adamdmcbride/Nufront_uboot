@@ -26,6 +26,7 @@ include $(TOPDIR)/config.mk
 LIB 	:= $(obj)libpower.a
 
 COBJS-$(CONFIG_TWL4030_POWER)	+= twl4030.o
+COBJS-$(CONFIG_UBOOT_CHARGER)	+= draw_icon.o
 
 COBJS	:= $(COBJS-y)
 SRCS 	:= $(COBJS:.o=.c)

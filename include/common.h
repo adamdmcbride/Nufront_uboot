@@ -137,6 +137,7 @@ typedef volatile unsigned char	vu_char;
 #define BUG_ON(condition) do { if (unlikely((condition)!=0)) BUG(); } while(0)
 #endif /* BUG */
 
+#define CURRENT_DEBUG_LEVEL 1
 #define KERN_UART     1
 #define KERN_ERROR    2
 #define KERN_INFO     3
@@ -739,8 +740,14 @@ int cpu_release(int nr, int argc, char *argv[]);
 
 #define ALIGN(x,a)		__ALIGN_MASK((x),(typeof(x))(a)-1)
 #define __ALIGN_MASK(x,mask)	(((x)+(mask))&~(mask))
-void    read_boot_env (void);
+unsigned int  read_boot_env (void);
 extern unsigned int disp_flag;	//display flag
+int detect_charge_status();
+int charge_status();
+void power_key_delay(void);
+int  power_key_status(void);
+int drv_lcd_init(void);
 void read_hdmi_resolution();
+extern char *itoa(unsigned int i);
 
 #endif	/* __COMMON_H_ */

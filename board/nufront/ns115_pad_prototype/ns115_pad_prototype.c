@@ -25,11 +25,11 @@ void show_boot_progress(int progress)
 
 #define COMP_MODE_ENABLE ((unsigned int)0x0000EAEF)
 
-static char bootargs_recovery[] = "set bootargs root=/dev/mmcblk1p8 rw rootwait mem=776M console=tt    yS0,115200 init=/init video=nusmartfb:${resolution}-${dispformat}";
+static char bootargs_recovery[] = "set bootargs root=/dev/mmcblk1p8 rw rootwait mem=776M console=ttyS0,115200 init=/init video=nusmartfb:${resolution}-${dispformat}";
 
 static char bootcmd_recovery[] = "run default_bootargs;ext4load mmc 1:8 0x80007fc0 uImage_recovery;ns115 cpu volt 1230000;bootm";
 
-static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS    0,115200 init=/init video=nusmartfb:${resolution}-${dispformat} androidboot.mode=charger";
+static char bootargs_charge[] = "set bootargs root=/dev/mmcblk1p2 rw rootwait mem=776M console=ttyS0,115200 init=/init video=nusmartfb:${resolution}-${dispformat} androidboot.mode=charger";
 
 #define NUFRONT_LCD1_BASE 0xB4800000
 static unsigned int recovery_flag = 0;
@@ -78,14 +78,14 @@ int board_init (void)
 	gpio_pinmux_config(86);         //CAM_PWR_EN;gpioc22
 	nufront_set_gpio_value(86,1);
 
-	gpio_pinmux_config(37);		//config USB_SWITCH output high,PB5
-	nufront_set_gpio_value(37,1);
+	gpio_pinmux_config(37);		//config USB_SWITCH output low, device mode
+	nufront_set_gpio_value(37,0);
 	
 	gpio_pinmux_config(48);         //VDD_5V_EN;gpiob16
 	nufront_set_gpio_value(48,1);
 
 	gpio_pinmux_config(85);         //USB_5V_EN;gpioc21
-	nufront_set_gpio_value(85,1);
+	nufront_set_gpio_value(85,0);
 
 #ifdef CONFIG_FASTBOOT_RECOVERY
 	unsigned int key_vol_up,key_vol_down;
@@ -234,6 +234,95 @@ ulong get_timer_masked (void)
 }
 
 #define NS115_I2C1_BASE 0x06110000
+int power_key_status()
+{
+	unsigned char rbuf[4];
+	unsigned char wbuf[4];
+	unsigned char rbuf_11[4];
+	unsigned char wbuf_11[4];
+
+	rbuf[0] = 0x00;
+	wbuf[0] = 0x1b;
+
+	rbuf_11[0] = 0x00;
+	wbuf_11[0] = 0x11;
+
+	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+	dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
+	//printf("rbuf[0] = 0x%x %d\n",rbuf[0],__LINE__);
+	if(rbuf[0] & 0x01){
+		return 1;
+	}
+	return 0;
+}
+
+
+int init_ricoh_battery_low_detect()
+{
+	unsigned char wbuf[4];
+
+	wbuf[0] = 0x3;		/* REG EARLYDAC */
+	wbuf[1] = 0x1c;		/* EARLYDAC: 0x1c - 3.4v */
+	dw_i2c_master_init((void*)NS115_I2C1_BASE,0x34);
+	dw_i2c_send_bytes((void*)NS115_I2C1_BASE,wbuf,2);
+	return 0;
+}
+
+int do_poweroff()
+{
+	unsigned char wbuf[4];
+
+	wbuf[0] = 0x13;		/* REG EARLYDAC */
+	wbuf[1] = 0x1;
+	dw_i2c_master_init((void*)NS115_I2C1_BASE,0x34);
+	dw_i2c_send_bytes((void*)NS115_I2C1_BASE,wbuf,2);
+	return 0;
+}
+void pmic_gpio_init(void){
+	unsigned char wbuf[4];
+	wbuf[0] = 0xa0;//IOSEL
+	wbuf[1] = 0x00;
+	dw_i2c_master_init((void*)NS115_I2C1_BASE,0x34);
+	dw_i2c_send_bytes((void*)NS115_I2C1_BASE,wbuf,2);
+}
+int is_charger_plugged(void)
+{
+	unsigned char rbuf[4];
+	unsigned char wbuf[4];
+
+	wbuf[0] = 0x1b; /* REG PWRMON1 */
+	rbuf[0] = 0x0;
+
+	dw_i2c_master_init((void*)NS115_I2C1_BASE,0x34);
+	dw_i2c_smbus_read((void*)NS115_I2C1_BASE,wbuf,1,rbuf,1);
+
+	if(rbuf[0] & 0x02) {
+		printf("charger is plugged in\n");
+		return 1;
+	}
+	return 0;
+}
+
+int is_battery_low()
+{
+	unsigned char rbuf[4];
+	unsigned char wbuf[4];
+
+	wbuf[0] = 0x1f; /* REG PWRMON2 */
+	rbuf[0] = 0x0;
+
+	dw_i2c_master_init((void*)NS115_I2C1_BASE,0x34);
+	dw_i2c_smbus_read((void*)NS115_I2C1_BASE,wbuf,1,rbuf,1);
+
+	if(rbuf[0] & 0x04) {
+		printf("battery too low\n");
+		return 1;
+	} else {
+		printf("PWRMON2: 0x%02x\n", rbuf[0]);
+	}
+
+	return 0;
+}
 void power_key_delay()
 {
 	unsigned char rbuf[4];
@@ -250,99 +339,132 @@ void power_key_delay()
 	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
 	dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
 	dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf_11,1,rbuf_11,1);
-	printf("rbuf[0] = 0x%x %d\n",rbuf[0],__LINE__);
-	printf("rbuf_11[0] = 0x%x %d\n",rbuf_11[0],__LINE__);
+	printf("power monitor: 0x%x\n",rbuf[0]);
+	printf("poweron reason: 0x%x\n",rbuf_11[0]);
 	if((rbuf_11[0] & 0x01) == 0x01){
-		if((!(rbuf[0]  & 0x01))) 
+		if((!(rbuf[0] & 0x01)))
 		{
-			wbuf[0] = 0x13;
-			wbuf[1] = 0x01;
-			dw_i2c_send_bytes(NS115_I2C1_BASE,wbuf,2);
+			ricoh583_poweroff();
 		}
 		udelay(1000000);
 		dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
-		if((!(rbuf[0]  & 0x1)))
-//		if((!(rbuf[0]  & 0x01)) && (rbuf_11[0] & 0x01) == 0x01)
+		if((!(rbuf[0] & 0x1)))
+//		if((!(rbuf[0] & 0x01)) && (rbuf_11[0] & 0x01) == 0x01)
 		{
-			wbuf[0] = 0x13;
-			wbuf[1] = 0x01;
-			dw_i2c_send_bytes(NS115_I2C1_BASE,wbuf,2);
+			ricoh583_poweroff();
 		}
-	} else {
-		return 0;
 	}
 }
 
-static int charge_status()
-{
+int power_on_by_AC(void){
 	unsigned char rbuf[4];
 	unsigned char wbuf[4];
-	unsigned char rbuf_12[4];
-	unsigned char wbuf_12[4];
-	unsigned int ret = 0;
-	unsigned int charge_flag = 0;
+	int ret;
 
 	rbuf[0] = 0x00;
 	wbuf[0] = 0x11;
 
-	rbuf_12[0] = 0x00;
-	wbuf_12[0] = 0x12;
-
 	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
 	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
-    	if(ret){
-        	printf("ERROR: read PMIC register failed\r\n");
-        	return;
-    	}
-//	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
-	
-	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf_12,1,rbuf_12,1);
-    	if(ret){
-        	printf("ERROR: read PMIC register failed\r\n");
-        	return;
-    	}
+	if(ret){
+		printf("ERROR: read PMIC register failed\r\n");
+		return;
+	}
+	//printf("rbuf[0]= 0x%x\n",rbuf[0]);
+	if(rbuf[0]  & 0x2)
+		return 1;
+	return 0;
+}
 
-	printf("rbuf[0]= 0x%x\n",rbuf[0]);
-	printf("rbuf_12[0]= 0x%x\n",rbuf_12[0]);
-	if(((rbuf[0]  & 0x12) == 0x02)) 
-		charge_flag = 1;
-	if(((rbuf[0] & 0x2) == 0x2) && ((rbuf_12[0] & 0x80) == 0x80))
-		charge_flag = 0;
-	return charge_flag;
+int charge_status()
+{
+        unsigned char rbuf[4];
+        unsigned char wbuf[4];
+        unsigned char rbuf_12[4];
+        unsigned char wbuf_12[4];
+        unsigned int ret = 0;
+        unsigned int charge_flag = 0;
+
+        rbuf[0] = 0x00;
+        wbuf[0] = 0x11;
+
+        rbuf_12[0] = 0x00;
+        wbuf_12[0] = 0x12;
+
+        dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+        ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
+        if(ret){
+                printf("ERROR: read PMIC register failed\r\n");
+                return;
+        }
+//      dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+
+        ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf_12,1,rbuf_12,1);
+        if(ret){
+                printf("ERROR: read PMIC register failed\r\n");
+                return;
+        }
+
+        printf("rbuf[0]= 0x%x\n",rbuf[0]);
+        printf("rbuf_12[0]= 0x%x\n",rbuf_12[0]);
+        if(((rbuf[0]  & 0x12) == 0x02))
+                charge_flag = 1;
+        if(((rbuf[0] & 0x2) == 0x2) && ((rbuf_12[0] & 0x80) == 0x80))
+                charge_flag = 0;
+        return charge_flag;
+
+}
+
+int detect_charge_status()
+{
+	unsigned char rbuf[4];
+	unsigned char wbuf[4];
+	unsigned int ret = 0;
+
+	rbuf[0] = 0x00;
+	wbuf[0] = 0xab;//wbuf[0] = 0x1b;
+
+	printf("prototype\n");
+	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
+	if(ret){
+		printf("ERROR: read PMIC register failed\r\n");
+		return 0;
+	}
+	if(rbuf[0]  & 0x8)
+		return 1;
+	if(rbuf[0]  & 0x10)
+		return 2;
+	return 0;
 		
 }
 
-void read_boot_env(void)
+unsigned int read_boot_env(void)
 {
-        int ret,selboot = 0;
-	unsigned int charge_flag = 0;
+        int ret,selboot = 1;
         struct hsearch_data env_htab;
         struct bootsel bootsel;
         const char *addr = 0x80007fc0;
         char sep = '\n';
         unsigned int  size;
 
-    	extern unsigned int _xloader_boot_mode;
-    
-	charge_flag = charge_status();
+	extern unsigned int _xloader_boot_mode;
+
 	if(fastboot_flag || _xloader_boot_mode == 0x02){
 		printf("fastboot mode\n");
 		do_fastboot(NULL,0,1,do_fastboot);
-		return;
-	}else if(recovery_flag){
+		return 0;
+	} else if(recovery_flag){
 		setenv("default_bootargs",bootargs_recovery);
 		setenv("bootcmd",bootcmd_recovery);
 		printf("recovery mode\n");
-		return;
-	}else if(charge_flag){
-		setenv("default_bootargs",bootargs_charge);
-		setenv("bootcmd",bootcmd_recovery);
-		return;
-        } else {
+		return 0;
+	} else {
 		char *ext4_load[5]  = { "do_ext4_load","mmc","1:7","0x80007fc0","boot_config", };
 		size = do_ext4_load(NULL,0,5,ext4_load);
-                if (size == 1)
+                if (size == 1){
                         return -1;
+		}
                 hread_buf(&env_htab,addr,size,sep,&bootsel);
 //	        printf("bootsystem = %s\n",bootsel.system);
 //            	printf("bootdevice = %s\n",bootsel.device);
@@ -355,7 +477,7 @@ void read_boot_env(void)
                         setenv("default_bootargs",bootargs_recovery);
 			setenv("bootcmd", bootcmd_recovery);
                 }       
-		return;
+		return selboot;
         } 
 }
 

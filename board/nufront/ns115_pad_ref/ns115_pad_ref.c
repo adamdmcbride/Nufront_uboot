@@ -6,12 +6,12 @@
 #include <search.h>
 #include <nusmart_i2c.h>
 #include <prcm.h>
+#include "battary.h"
 
 static ulong timestamp;
 static ulong lastdec;
 
 #define READ_TIMER (*(volatile ulong *)(CONFIG_SYS_TIMERBASE+4))
-
 
 static void flash__init (void);
 static void rvpb_timer_init(void);
@@ -49,6 +49,7 @@ static inline void delay (unsigned long loops)
 int board_init (void)
 {
 	volatile unsigned int tmp = 0;
+	int volt = 0;
 	DECLARE_GLOBAL_DATA_PTR;
 
 
@@ -227,6 +228,27 @@ ulong get_timer_masked (void)
 }
 
 #define NS115_I2C1_BASE 0x06110000
+int  power_key_status()
+{
+	unsigned char rbuf[4];
+	unsigned char wbuf[4];
+	unsigned char rbuf_11[4];
+	unsigned char wbuf_11[4];
+
+	rbuf[0] = 0x00;
+	wbuf[0] = 0x1b;
+
+	rbuf_11[0] = 0x00;
+	wbuf_11[0] = 0x11;
+
+	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+	dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
+	if(rbuf[0]  & 0x01){
+		return 1;
+	}
+	return 0;
+}
+
 void power_key_delay()
 {
 	unsigned char rbuf[4];
@@ -248,25 +270,47 @@ void power_key_delay()
 	if((rbuf_11[0] & 0x01) == 0x01){
 		if((!(rbuf[0]  & 0x01))) 
 		{
-			wbuf[0] = 0x13;
-			wbuf[1] = 0x01;
-			dw_i2c_send_bytes(NS115_I2C1_BASE,wbuf,2);
+			ricoh583_poweroff();
 		}
 		udelay(1000000);
 		dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
 		if((!(rbuf[0]  & 0x1)))
 //		if((!(rbuf[0]  & 0x01)) && (rbuf_11[0] & 0x01) == 0x01)
 		{
-			wbuf[0] = 0x13;
-			wbuf[1] = 0x01;
-			dw_i2c_send_bytes(NS115_I2C1_BASE,wbuf,2);
+			ricoh583_poweroff();
 		}
 	} else {
 		return 0;
 	}
 }
 
-static int charge_status()
+int detect_charge_status()
+{
+	unsigned char rbuf[4];
+	unsigned char wbuf[4];
+	unsigned char rbuf_12[4];
+	unsigned char wbuf_12[4];
+	unsigned int ret = 0;
+	unsigned int charge_flag = 0;
+
+	rbuf[0] = 0x00;
+	wbuf[0] = 0x1b;
+
+	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
+	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
+	if(ret){
+		printf("ERROR: read PMIC register failed\r\n");
+		return;
+	}
+
+	if(((rbuf[0]  & 0x2) == 0x2))
+		charge_flag = 1;
+	if(((rbuf[0] & 0x2) != 0x2))
+		charge_flag = 0;
+	return charge_flag;
+}
+
+int charge_status()
 {
 	unsigned char rbuf[4];
 	unsigned char wbuf[4];
@@ -305,37 +349,33 @@ static int charge_status()
 		
 }
 
-void read_boot_env(void)
+unsigned int read_boot_env(void)
 {
         int ret,selboot = 0;
-	unsigned int charge_flag = 0;
         struct hsearch_data env_htab;
         struct bootsel bootsel;
         const char *addr = 0x80007fc0;
         char sep = '\n';
         unsigned int  size;
+	unsigned int volt = 0;
 
     	extern unsigned int _xloader_boot_mode;
     
-	charge_flag = charge_status();
 	if(fastboot_flag || _xloader_boot_mode == 0x02){
 		printf("fastboot mode\n");
 		do_fastboot(NULL,0,1,do_fastboot);
-		return;
-	}else if(recovery_flag){
+		return 0;
+	} else if(recovery_flag){
 		setenv("default_bootargs",bootargs_recovery);
 		setenv("bootcmd",bootcmd_recovery);
 		printf("recovery mode\n");
-		return;
-	}else if(charge_flag){
-		setenv("default_bootargs",bootargs_charge);
-		setenv("bootcmd",bootcmd_recovery);
-		return;
-        } else {
+		return 0;
+	} else {
 		char *ext4_load[5]  = { "do_ext4_load","mmc","1:7","0x80007fc0","boot_config", };
 		size = do_ext4_load(NULL,0,5,ext4_load);
-                if (size == 1)
+                if (size == 1){
                         return -1;
+		}
                 hread_buf(&env_htab,addr,size,sep,&bootsel);
 //	        printf("bootsystem = %s\n",bootsel.system);
 //            	printf("bootdevice = %s\n",bootsel.device);
@@ -348,7 +388,7 @@ void read_boot_env(void)
                         setenv("default_bootargs",bootargs_recovery);
 			setenv("bootcmd", bootcmd_recovery);
                 }       
-		return;
+		return selboot;
         } 
 }
 

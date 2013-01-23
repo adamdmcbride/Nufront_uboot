@@ -314,7 +314,7 @@ void read_hdmi_resolution()
 	}
 }
 
-void read_boot_env(void)
+unsigned int read_boot_env(void)
 {
         int ret,selboot = 0;
         struct hsearch_data env_htab;
