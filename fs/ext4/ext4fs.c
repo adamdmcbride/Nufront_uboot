@@ -1040,7 +1040,7 @@ int ext4fs_write(const char *fname, unsigned char *buffer,
 	int inodeno;
 	time_t timestamp = 0;
 
-	uint64_t bytes_reqd_for_file;
+	uint32_t bytes_reqd_for_file;
 	unsigned int blks_reqd_for_file;
 	unsigned int blocks_remaining;
 	int existing_file_inodeno;

@@ -405,8 +405,8 @@ int charge_status()
                 return;
         }
 
-        printf("rbuf[0]= 0x%x\n",rbuf[0]);
-        printf("rbuf_12[0]= 0x%x\n",rbuf_12[0]);
+        //printf("rbuf[0]= 0x%x\n",rbuf[0]);
+        //printf("rbuf_12[0]= 0x%x\n",rbuf_12[0]);
         if(((rbuf[0]  & 0x12) == 0x02))
                 charge_flag = 1;
         if(((rbuf[0] & 0x2) == 0x2) && ((rbuf_12[0] & 0x80) == 0x80))
@@ -424,7 +424,7 @@ int detect_charge_status()
 	rbuf[0] = 0x00;
 	wbuf[0] = 0xab;//wbuf[0] = 0x1b;
 
-	printf("prototype\n");
+	//printf("prototype\n");
 	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
 	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
 	if(ret){

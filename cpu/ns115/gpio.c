@@ -10,6 +10,12 @@
  */
 #include <common.h>
 #define GPIO_BASE_ADDR 0x06140000
+#define WKGPIO_BASE_ADDR 0x05823000
+#define NS115_PRCM_BASE 0x05821000
+#define GPIO_PORTA_DDR	0x4
+#define GPIO_PORTA_EXT	0x50
+#define GPIO_PORTA_DR	0x0
+
 unsigned int gpio_pinmux_config(unsigned pin_nr)
 {
 	unsigned int addr;
@@ -180,13 +186,62 @@ int nufront_get_gpio_value(unsigned pin_nr)
 	return reg_val;
 }
 
+int wkgpio_enable(int enable)
+{
+	int val;
 
+	val = readl(NS115_PRCM_BASE);
+	if (enable){
+		val |= 1 << 1;
+	}else{
+		val &= ~(1 << 1);
+	}
+	writel(val, NS115_PRCM_BASE);
+}
 
+int wkgpio_direction_input(unsigned pin_nr)
+{
+	int val;
 
+	val = readl(WKGPIO_BASE_ADDR + GPIO_PORTA_DDR);
+	val &= ~(1 << pin_nr);
+	writel(val, WKGPIO_BASE_ADDR + GPIO_PORTA_DDR);
 
+	return 0;
+}
 
+int wkgpio_direction_output(unsigned pin_nr)
+{
+	int val;
 
+	val = readl(WKGPIO_BASE_ADDR + GPIO_PORTA_DDR);
+	val |= (1 << pin_nr);
+	writel(val, WKGPIO_BASE_ADDR + GPIO_PORTA_DDR);
 
+	return 0;
+}
 
+int get_wkgpio_value(unsigned pin_nr)
+{
+	int val;
 
-	
+	val = readl(WKGPIO_BASE_ADDR + GPIO_PORTA_EXT);
+	val = !!(val & (1 << pin_nr));
+
+	return val;
+}
+
+int set_wkgpio_value(unsigned pin_nr, int value)
+{
+	int val;
+
+	val = readl(WKGPIO_BASE_ADDR + GPIO_PORTA_DR);
+	if (value){
+		val |= (1 << pin_nr);
+	}else{
+		val &= ~(1 << pin_nr);
+	}
+	writel(val, WKGPIO_BASE_ADDR + GPIO_PORTA_DR);
+
+	return 0;
+}

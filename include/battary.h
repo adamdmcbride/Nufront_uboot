@@ -46,9 +46,8 @@ enum ricoh583_adc_mode{
         ADC_MODE_AUTO
 };
 
-int ricoh583_init_battery(enum ricoh583_adc_channel channel);
-int ricoh583_get_mvolts(enum ricoh583_adc_channel channel);
-void ricoh583_poweroff(void);
-int read_battary_volt(void);
+extern void ricoh583_poweroff(void);
+extern int read_battary_volt(void);
+extern int ns115_get_capacity(void);
 
 #endif

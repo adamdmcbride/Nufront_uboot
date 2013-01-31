@@ -339,8 +339,8 @@ int charge_status()
         	return;
     	}
 
-	printf("rbuf[0]= 0x%x\n",rbuf[0]);
-	printf("rbuf_12[0]= 0x%x\n",rbuf_12[0]);
+	//printf("rbuf[0]= 0x%x\n",rbuf[0]);
+	//printf("rbuf_12[0]= 0x%x\n",rbuf_12[0]);
 	if(((rbuf[0]  & 0x12) == 0x02)) 
 		charge_flag = 1;
 	if(((rbuf[0] & 0x2) == 0x2) && ((rbuf_12[0] & 0x80) == 0x80))

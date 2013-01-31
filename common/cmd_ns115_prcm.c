@@ -223,7 +223,6 @@ int do_ns115(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	unsigned int  nouse = 0;
 
     	if (!strncmp(argv[1], "efuse", 5)) {
-//        	printf("zx-efuse begin.\n");
         	void get_cpu_efuse_data(unsigned int* low, unsigned int* high);
 
         	unsigned int low, high;

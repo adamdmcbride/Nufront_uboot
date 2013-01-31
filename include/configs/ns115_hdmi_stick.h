@@ -145,7 +145,7 @@
 #define CONFIG_SYS_CBSIZE	256		/* Console I/O Buffer Size	*/
 /* Monitor Command Prompt   */
 #define CONFIG_SYS_PROMPT	"NS115_HDMI_STICK # "
-#define CONFIG_IDENT_STRING "\n\n***  NS115 HDMI STICK Board V2.0***\n\n"
+#define CONFIG_IDENT_STRING "\n\n***  NS115 HDMI STICK Board V2.1***\n\n"
 #define CONFIG_FASTBOOT_GETVAR_VERSION  "NS115"
 /* Print Buffer Size */
 #define CONFIG_SYS_PBSIZE	(CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)

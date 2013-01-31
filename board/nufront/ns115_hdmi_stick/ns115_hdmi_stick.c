@@ -253,45 +253,6 @@ void power_key_delay()
 	}
 }
 
-static int charge_status()
-{
-	unsigned char rbuf[4];
-	unsigned char wbuf[4];
-	unsigned char rbuf_12[4];
-	unsigned char wbuf_12[4];
-	unsigned int ret = 0;
-	unsigned int charge_flag = 0;
-
-	rbuf[0] = 0x00;
-	wbuf[0] = 0x11;
-
-	rbuf_12[0] = 0x00;
-	wbuf_12[0] = 0x12;
-
-	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
-	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf,1,rbuf,1);
-    	if(ret){
-        	printf("ERROR: read PMIC register failed\r\n");
-        	return;
-    	}
-//	dw_i2c_master_init(NS115_I2C1_BASE,0x34);
-	
-	ret = dw_i2c_smbus_read(NS115_I2C1_BASE,wbuf_12,1,rbuf_12,1);
-    	if(ret){
-        	printf("ERROR: read PMIC register failed\r\n");
-        	return;
-    	}
-
-	printf("rbuf[0]= 0x%x\n",rbuf[0]);
-	printf("rbuf_12[0]= 0x%x\n",rbuf_12[0]);
-	if(((rbuf[0]  & 0x12) == 0x02)) 
-		charge_flag = 1;
-	if(((rbuf[0] & 0x2) == 0x2) && ((rbuf_12[0] & 0x80) == 0x80))
-		charge_flag = 0;
-	return charge_flag;
-		
-}
-
 void read_hdmi_resolution()
 {
 	char *mem = (char*)0x80007fc0;

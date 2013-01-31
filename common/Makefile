@@ -43,7 +43,7 @@ COBJS-y += stdio.o
 COBJS-y += stdlib.o
 COBJS-y += xyzModem.o
 COBJS-y += fastboot.o
-COBJS-y += cmd_battary.o
+COBJS-$(CONFIG_CMD_BATTARY) += cmd_battary.o
 
 # core command
 COBJS-y += cmd_boot.o

@@ -866,7 +866,7 @@ static int nufront_mmc_write(mmc_card_data *mmc_c,mmc_controller_data *mmc_contr
 			printf("#");
 		blkcnt--;
 	}
-	printf("\n");
+	//printf("\n");
 	status = WaitForValue(&mmc_contr_cur->io->SRS12,TC_MASK | ERRI_MASK,1,0xffff);
 	if(mmc_contr_cur->io->SRS12 & ERRI_MASK){
 		//		mmc_contr_cur->io->SRS12 = 0xffff0000;
@@ -1107,6 +1107,44 @@ unsigned long mmc_bread(int dev_num, ulong start_block, ulong blkcnt, ulong *dst
 	}
 }
 
+unsigned long mmc_bwrite(int dev_num, ulong start_block, ulong blkcnt, ulong *src)
+{
+	int retry=3;
+	unsigned long ret;
+	int retries = 20;
+	unsigned int resp[4];
+	mmc_card_data *mmc_card_cur = &cur_card_data[dev_num];
+	mmc_controller_data *mmc_contr_cur = &cur_controller_data[dev_num];
+
+	while(retry--){
+		ret = (unsigned long)nufront_mmc_write_sect((unsigned int *)src,(blkcnt * MMCSD_SECTOR_SIZE),
+					&cur_controller_data[dev_num], &cur_card_data[dev_num],start_block);
+		if (ret != 0)
+		{
+			return ret;
+		}
+
+		ret = sdmmc_send_cmd(mmc_card_cur,mmc_contr_cur,MMC_CMD13,
+						mmc_card_cur->RCA<<16, resp);
+		ret = sdmmc_send_cmd(mmc_card_cur, mmc_contr_cur, MMC_CMD12, 0, resp);
+
+		// wait card ready
+		retries = 20;
+		do{
+			ret = sdmmc_send_cmd(mmc_card_cur,mmc_contr_cur,MMC_CMD13,
+						mmc_card_cur->RCA<<16, resp);
+			if(ret != 1)
+				continue;
+
+			if( (mmc_card_cur->response[0] & 0x100)
+						&& ((mmc_card_cur->response[0] >> 9) & 0xf) <= 4){
+				break;
+			}
+		}while(--retries >= 0);
+	}
+	return 0;
+}
+
 int mmc_read(int mmc_cont, unsigned int blknr, unsigned char *dst, int blkcnt)
 {
 	unsigned int read_cnt = 0;
@@ -1163,6 +1201,7 @@ int mmc_init(int slot)
 	mmc_blk_dev[slot].lba = cur_card_data[slot].size;
 	mmc_blk_dev[slot].removable = 0;
 	mmc_blk_dev[slot].block_read = mmc_bread;
+	mmc_blk_dev[slot].block_write = mmc_bwrite;
     init_part(&mmc_blk_dev[slot]);
 
     mmc_blk_dev[slot].lba = cur_card_data[slot].size;

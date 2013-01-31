@@ -38,6 +38,7 @@
 #define CONFIG_SYS_NS16550_COM1		0x06090000
 
 #define CONFIG_NS115_PAD_PROTOTYPE
+#define CONFIG_CMD_EXT4_WRITE
 
 #define CONFIG_SYS_ALT_MEMTEST 1
 #define CONFIG_SYS_MEMTEST_START       	0x80000000
@@ -54,7 +55,7 @@
 /*
  * Size of malloc() pool
  */
-#define CONFIG_SYS_MALLOC_LEN	(CONFIG_ENV_SIZE + 128 * 1024)
+#define CONFIG_SYS_MALLOC_LEN	(CONFIG_ENV_SIZE + 256 * 1024)
 #define CONFIG_SYS_GBL_DATA_SIZE	128	/* size in bytes reserved for initial data */
 
 /*
@@ -146,7 +147,7 @@
 #define CONFIG_SYS_CBSIZE	256		/* Console I/O Buffer Size	*/
 /* Monitor Command Prompt   */
 #define CONFIG_SYS_PROMPT	"NS115_PAD_PROTOTYPE # "
-#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD PROTOTYPE Board V1.5***\n\n"
+#define CONFIG_IDENT_STRING "\n\n***  NS115 PAD PROTOTYPE Board V1.7***\n\n"
 //#define CONFIG_FASTBOOT_GET_VAR_BASEBAND_STRING "NS115"
 #define CONFIG_FASTBOOT_GETVAR_VERSION  "NS115"
 /* Print Buffer Size */
@@ -374,5 +375,16 @@
 //#define CONFIG_LOGICTILE 1
 //#define CONFIG_BOOTARGS "root=/dev/mmcblk0p3 rw rootwait mem=128M console=ttyS0,115200 video=nusmartfb:640x480 init=/init"
 //#define CONFIG_BOOTCOMMAND "mmc init; fatload mmc 0:1 0x80007fc0 uImage"
+
+#define CONFIG_CMD_BATTARY
+#define AC_CHG_CURRENT	1200//mA
+#define BATT_MAX_MAH	3000//mAh
+#define BATT_RESISTOR 100//mohm
+#define USB_CHG_CURRENT	500//mA
+#define USB_GPIO_RICOH583
+#define USB_CHG_GPIO 4
+#define USB_CHG_GPIO_EFFECT 1
+#define SYS_CONSUMPTION 1065//mW
+#define CHARGER_NO_DELAY  1
 
 #endif							/* __CONFIG_H */

@@ -102,9 +102,8 @@ void init_fastboot(struct FastbootArgs* args) {
 	memset(args, sizeof(struct FastbootArgs), 0);
 }
 /********************************/
-// zx fastboot
 
-//#define FASTLOG(fmt, args...)  printf("zx, fastboot host: " fmt "\n", ##args)
+//#define FASTLOG(fmt, args...)  printf("fastboot host: " fmt "\n", ##args)
 #define FASTLOG(fmt, args...)
 #define MAX_PTN 20
 
@@ -955,7 +954,7 @@ static void handle_fastboot(unsigned char ** data_buff, unsigned int len)
 			//fastboot_okay(strbuff);
 			//ADUMP_DATA(strbuff, strlen(strbuff), 1);
 			fastboot_okay(strbuff);
-			//printf("zx, usbaddr, %s,%p", strbuff, strbuff);
+			//printf("usbaddr, %s,%p", strbuff, strbuff);
 		}
 		else if(!strncmp(buf+7,"version",7))
 		{
@@ -994,7 +993,7 @@ static void handle_fastboot(unsigned char ** data_buff, unsigned int len)
 #if defined(FASTBOOT_MEMORY_OPTIMIZE)
 		*data_buff = (unsigned char*)RX_BUF_CMD;//DL_BUF_ADDR;
 		dlbuf = (char *)RX_BUF_CMD;
-		optimize_dump("\nzx,fastboot, download:%08x\n", *data_buff);
+		optimize_dump("\nfastboot, download:%08x\n", *data_buff);
 #else
 		dlbuf = (char *)DL_BUF_ADDR;
 #endif
@@ -1007,7 +1006,7 @@ static void handle_fastboot(unsigned char ** data_buff, unsigned int len)
 		fastbootArgs.b_is_upload_partition_config = 1;
 		//	char *buf_part = (char *)TX_BUF;
 		//	memcpy(buf_part,data_buff,dlsize);
-		//	optimize_dump("\nzx,fastboot, download:%08x\n", *buf_part);
+		//	optimize_dump("\nfastboot, download:%08x\n", *buf_part);
 		board_mmc_init(dlsize);
 		fastboot_okay(NULL);
 	}

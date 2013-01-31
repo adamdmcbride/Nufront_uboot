@@ -506,7 +506,7 @@ if(recovery_flag != 0)
 	unsigned int lcd_en_volt = 0;
 	unsigned int charge_flag = 0, pre_charge_flag = 0, bat_flag = 0;
 	unsigned int lcd_flag = 0, is_adapter_pullout = 0;
-	unsigned int volt = 0, ret = 0, key_pressed = 0, idle_time = 0, key_status = RELEASE;
+	unsigned int volt = 0, capacity = 0, ret = 0, key_pressed = 0, idle_time = 0, key_status = RELEASE;
 #ifdef CONFIG_NS115_PAD_PROTOTYPE
 	unsigned int lcd_on = 0, charger_type = 0;
 #endif
@@ -529,7 +529,7 @@ if(recovery_flag != 0)
 		printf("latch_volt default = %d \n",low_bat_volt);
 	}
 
-	volt = read_battary_volt();
+	volt = read_battery_volt();
 	draw_init(gd->fb_base, panel_info.vl_row, panel_info.vl_col);
 #ifdef CONFIG_NS115_PAD_PROTOTYPE
 	if(power_on_by_AC()){
@@ -551,8 +551,9 @@ if(recovery_flag != 0)
 			is_adapter_pullout = 1;//judge is adapter pullout or never insert adapter
 		}
 		pre_charge_flag = charge_flag;
-		volt = read_battary_volt();
-		printf("test flag %d volt %d\n", charge_flag, volt);
+		volt = read_battery_volt();
+		capacity = ns115_get_capacity();
+		//printf("test flag %d volt %d\n", charge_flag, volt);
 
 		if (charge_flag){
 			if (volt < lcd_en_volt){
@@ -567,31 +568,16 @@ if(recovery_flag != 0)
 			else if (volt > lcd_en_volt){
 				if (suspend_flag == RESUME){
 					int i = 0, draw_level = 0;
-
-					if (volt >= 4200){
-						draw_level = 0;
-					}
-					else if (volt < 4200 && volt >= 4000){
-						draw_level = 1;
-					}
-					else if (volt < 4000 && volt >= 3700){
-						draw_level = 2;
-					}
-					else if (volt < 3700 && volt >= 3400){
-						draw_level = 3;
-					}
-					else if (volt < 3400 && volt >= 3200){
-						draw_level = 4;
-					}
-					else if (volt < 3200){
-						draw_level = 5;
-					}
+					draw_level = 5 - capacity / 20;
 
 					if (lcd_flag == 0){
 						show_bat_framework(LOGO_H, LOGO_W);
 						lcd_enable();
 						lcd_flag = 1;
 					}
+
+					if(draw_level != 0)
+						draw_level = 5;
 
 					for (i = draw_level; i >= 0; i--){
 						int j = 0;
@@ -666,15 +652,11 @@ if(recovery_flag != 0)
 						}
 					}
 				} else if (suspend_flag == BOOTUP) {
-					int volt_percent = (volt*100)/4200;
-					if (volt_percent > 100){
-						volt_percent = 100;
-					}
-					char *volt_buff = itoa(volt_percent);
+					char *volt_buff = itoa(capacity);
 					clear_logo();
 					lcd_disable();
 					setenv("volt_buff",volt_buff);
-					printf("BOOTUP\n");
+					printf("BOOTUP: batt=%s\n", volt_buff);
 					break;
 				}
 			}
@@ -789,10 +771,10 @@ if(recovery_flag != 0)
 		}else if(disp_flag == 1){	//32bit
 #if defined(CONFIG_NS115_HDMI_STICK)
 			if(mmc_cont == 0){
-				char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","8800","9000" };
+				char *mmc_read[] = {"mmc", "read", "0", "0x80007fc0","5210","1500" };
 				do_mmc(NULL, 0, 6, mmc_read);
 			}else if(mmc_cont == 1) {
-				char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","8800","9000" };
+				char *mmc_read[] = {"mmc", "read", "1", "0x80007fc0","5210","1500" };
 				do_mmc(NULL, 0, 6, mmc_read);
 			}
 #else

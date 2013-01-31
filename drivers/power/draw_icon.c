@@ -95,35 +95,36 @@ void show_bat_status(unsigned icon_h,unsigned icon_w,int status)
 
 	switch(status){
 		case 0:
+//			show_bat_framework(LOGO_H, LOGO_W);
 			draw_lines(stx, sty, endx, endy, BLUE);
 			break;
 		case 1:
 			background_sty = sty;
-			sty += dy*10/100;
+			sty += dy*20/100;
 			draw_lines(stx, background_sty, endx, sty, BLACK);
 			draw_lines(stx, sty, endx, endy, BLUE);
 			break;
 		case 2:
 			background_sty = sty;
-			sty += dy*30/100;
+			sty += dy*40/100;
 			draw_lines(stx, background_sty, endx, sty, BLACK);
 			draw_lines(stx, sty, endx, endy, BLUE);
 			break;
 		case 3:
 			background_sty = sty;
-			sty += dy*50/100;
+			sty += dy*60/100;
 			draw_lines(stx, background_sty, endx, sty, BLACK);
 			draw_lines(stx, sty, endx, endy, BLUE);
 			break;
 		case 4:
 			background_sty = sty;
-			sty += dy*70/100;
+			sty += dy*80/100;
 			draw_lines(stx, background_sty, endx, sty, BLACK);
 			draw_lines(stx, sty, endx, endy, BLUE);
 			break;
 		case 5:
 			background_sty = sty;
-			sty += dy*90/100;
+			sty += dy*100/100;
 			draw_lines(stx, background_sty, endx, sty, BLACK);
 			draw_lines(stx, sty, endx, endy, RED);
 			break;
